@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { User } from '@mono/server/src/shared/entities'
-import { onBeforeMount, ref } from 'vue'
-import { FwbButton } from 'flowbite-vue'
+import { watchEffect, ref } from 'vue'
 import { trpc } from '@/trpc'
 import {
   FwbTable,
@@ -11,22 +10,60 @@ import {
   FwbTableHeadCell,
   FwbTableRow,
   FwbHeading,
+  FwbButtonGroup,
+  FwbButton,
 } from 'flowbite-vue'
 import { DEFAULT_SERVER_ERROR } from '@/consts'
+import { Toast } from '@/utils/snackBarUtil'
 
 const users = ref<User[]>([])
 const errorMessage = ref('')
+const deleteButtonLoading = ref(false)
+const verifyButtonLoading = ref(false)
 
-onBeforeMount(async () => {
+watchEffect(async () => {
   users.value = await trpc.user.find.query()
 })
 
 async function verifyUser(userId: number) {
   try {
+    verifyButtonLoading.value = true
     await trpc.user.approve.mutate({ id: userId })
+    Toast.fire({
+      icon: 'success',
+      title: 'User Verified Successfully',
+    })
     users.value = await trpc.user.find.query()
   } catch (error) {
+    verifyButtonLoading.value = false
     errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
+    Toast.fire({
+      icon: 'error',
+      title: 'Could Not Verify User!',
+      text: errorMessage.value,
+    })
+  }
+}
+
+async function deleteUser(userId: number) {
+  try {
+    deleteButtonLoading.value = true
+    await trpc.user.deleteUser.mutate({ id: userId })
+    deleteButtonLoading.value = false
+    Toast.fire({
+      icon: 'success',
+      title: 'User Deleted Successfully',
+    })
+    const updatedUsers = users.value.filter((user) => user.id !== userId)
+    users.value = updatedUsers
+  } catch (error) {
+    deleteButtonLoading.value = false
+    errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
+    Toast.fire({
+      icon: 'error',
+      title: 'Could Not Delete User!',
+      text: errorMessage.value,
+    })
   }
 }
 </script>
@@ -61,14 +98,25 @@ async function verifyUser(userId: number) {
             <fwb-button v-else color="green" disabled>Verified</fwb-button>
           </fwb-table-cell>
           <fwb-table-cell class="text-left">
-            <FwbButton
-              component="RouterLink"
-              tag="router-link"
-              :href="{ name: 'UserDetails', params: { id: user.id } } as any"
-              class="pr-3"
-            >
-              View
-            </FwbButton>
+            <fwb-button-group class="space-x-3">
+              <FwbButton
+                component="RouterLink"
+                tag="router-link"
+                :href="{ name: 'UserDetails', params: { id: user.id } } as any"
+                class="pr-3"
+              >
+                View
+              </FwbButton>
+
+              <FwbButton
+                @click="deleteUser(user.id)"
+                class="pr-3"
+                color="red"
+                :loading="deleteButtonLoading"
+              >
+                Delete
+              </FwbButton>
+            </fwb-button-group>
           </fwb-table-cell>
         </fwb-table-row>
       </fwb-table-body>

@@ -28,6 +28,7 @@
     "flowbite-vue": "^0.1.0",
     "pinia": "^2.1.4",
     "superjson": "^2.2.1",
+    "sweetalert2": "^11.10.6",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },

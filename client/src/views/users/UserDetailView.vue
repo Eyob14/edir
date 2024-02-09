@@ -19,7 +19,7 @@ import { dateConvertor } from '@/utils/dateConvertor'
 import type { Relative, Income, MaterialLoan, User } from '@mono/server/src/shared/entities'
 import MaterialLoanModal from '@/components/modals/MaterialLoan.vue'
 import IncomeDetails from '@/components/modals/IncomeDetails.vue'
-import SnackBar from '@/components/SnackBar.vue'
+
 
 const route = useRoute()
 const userId = Number(route.params.id)

@@ -26,17 +26,32 @@ const router = createRouter({
         {
           path: 'createIncome',
           name: 'CreateIncome',
-          component: () => import('../views/monetary/CreateIncomeView.vue'),
+          component: () => import('../views/monetary/create/CreateIncomeView.vue'),
+        },
+        {
+          path: 'updateIncome/:id',
+          name: 'UpdateIncome',
+          component: () => import('../views/monetary/update/UpdateIncomeView.vue'),
         },
         {
           path: 'createExpense',
           name: 'CreateExpense',
-          component: () => import('../views/monetary/CreateExpenseView.vue'),
+          component: () => import('../views/monetary/create/CreateExpenseView.vue'),
+        },
+        {
+          path: 'updateExpense/:id',
+          name: 'UpdateExpense',
+          component: () => import('../views/monetary/update/UpdateExpenseView.vue'),
         },
         {
           path: 'createPenalty',
           name: 'CreatePenalty',
-          component: () => import('../views/monetary/CreatePenaltyView.vue'),
+          component: () => import('../views/monetary/create/CreatePenaltyView.vue'),
+        },
+        {
+          path: 'updatePenalty/:id',
+          name: 'UpdatePenalty',
+          component: () => import('../views/monetary/update/UpdatePenaltyView.vue'),
         },
       ],
     },

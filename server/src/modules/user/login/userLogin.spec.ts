@@ -5,7 +5,7 @@ const userSeed = {
   id: 12345,
   email: 'existing@user.com',
   password: '$2b$10$sD53fzWIQBjXWfSDzuwmMOyY1ZAygLpRZlLxxPhcNG5r9BFWrNaDC',
-  role: 'user'
+  role: 'user',
 }
 
 // Example using a mocked out db.

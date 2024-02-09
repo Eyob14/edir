@@ -22,6 +22,7 @@ export default publicProcedure
         id: true,
         password: true,
         role: true,
+        isVerified: true,
       },
       where: {
         email,
@@ -35,7 +36,7 @@ export default publicProcedure
       })
     }
 
-    if (user.isVerified) {
+    if (!user.isVerified) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'Your account is not verified yet.',

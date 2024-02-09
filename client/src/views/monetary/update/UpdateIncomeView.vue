@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watchEffect } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { FwbButton, FwbInput, FwbTextarea, FwbSelect } from 'flowbite-vue'
 import AlertError from '@/components/AlertError.vue'
-import useErrorMessage from '@/composables/useErrorMessage'
 import { trpc } from '@/trpc'
-import type { IncomeInsert } from '@mono/server/src/shared/entities'
+import type { IncomeInsert, Income } from '@mono/server/src/shared/entities'
 import PageForm from '@/components/PageForm.vue'
+import { DEFAULT_SERVER_ERROR } from '@/consts'
+import { Toast } from '@/utils/snackBarUtil'
 
 const router = useRouter()
+const route = useRoute()
+const incomeId = Number(route.params.id)
+
+const income = ref<Income>()
 const buttonLoading = ref(false)
+const errorMessage = ref('')
 
 const selected = ref('')
 const types = [
@@ -18,29 +24,57 @@ const types = [
 ]
 
 const incomeForm = ref({
-  amount: '',
   userEmail: '',
+  amount: '',
   description: '',
 })
 
-const [createNewIncome, errorMessage] = useErrorMessage(async () => {
-  buttonLoading.value = true
-
-  const newIncome: IncomeInsert = {
-    userEmail: incomeForm.value.userEmail,
-    amount: parseInt(incomeForm.value.amount),
-    type: selected.value as IncomeInsert['type'],
-    description: incomeForm.value.description,
-  }
-
-  await trpc.income.create.mutate(newIncome)
-  buttonLoading.value = false
-  router.back()
+watchEffect(async () => {
+  income.value = await trpc.income.findDetails.query({ id: incomeId })
+  incomeForm.value.userEmail = income.value?.user.email
+  incomeForm.value.amount = income.value?.amount.toString()
+  incomeForm.value.description = income.value?.description ?? ''
+  selected.value = income.value?.type ?? ''
 })
+
+async function updateIncome() {
+  try {
+    if (selected.value !== 'subscription' && selected.value !== 'deposit') {
+      throw Error('Please select a valid income type')
+    }
+    buttonLoading.value = true
+    const updatedIncome = {
+      id: incomeId,
+      amount: parseInt(incomeForm.value.amount),
+      type: selected.value as IncomeInsert['type'],
+      description: incomeForm.value.description,
+    }
+    await trpc.income.update.mutate(updatedIncome)
+    buttonLoading.value = false
+    Toast.fire({
+      icon: 'success',
+      title: 'Income Updated Successfully',
+    })
+    router.back()
+  } catch (error) {
+    buttonLoading.value = false
+    errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
+    Toast.fire({
+      icon: 'error',
+      title: 'Could Not Update Income!',
+      text: errorMessage.value,
+    })
+    router.back()
+  }
+}
 </script>
 
 <template>
-  <PageForm heading="Add New Income" formLabel="Create New Income" @submit="createNewIncome">
+  <PageForm
+    heading="Update Existing Income"
+    formLabel="Update Existing Income"
+    @submit="updateIncome"
+  >
     <template #default>
       <div class="space-y-6">
         <div class="mt-6 flex flex-col space-y-4">
@@ -51,6 +85,7 @@ const [createNewIncome, errorMessage] = useErrorMessage(async () => {
             type="email"
             v-model="incomeForm.userEmail"
             :required="true"
+            :disabled="true"
           />
           <FwbInput
             aria-label="Amount"
@@ -88,7 +123,7 @@ const [createNewIncome, errorMessage] = useErrorMessage(async () => {
           @click="router.back()"
           >Cancel</FwbButton
         >
-        <FwbButton type="submit" :loading="buttonLoading">Create</FwbButton>
+        <FwbButton type="submit" :loading="buttonLoading">Update</FwbButton>
       </div>
     </template>
   </PageForm>

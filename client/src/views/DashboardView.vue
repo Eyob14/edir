@@ -1,24 +1,12 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import ChartComponent from '@/components/chartComponent.vue'
 import { trpc } from '@/trpc'
 import type { Income, Expense, Penalty, MaterialBare } from '@mono/server/src/shared/entities'
-import {
-  FwbTable,
-  FwbTableBody,
-  FwbTableCell,
-  FwbTableHead,
-  FwbTableHeadCell,
-  FwbTableRow,
-  FwbButton,
-  FwbTab,
-  FwbTabs,
-  FwbHeading,
-} from 'flowbite-vue'
-import { dateConvertor } from '@/utils/dateConvertor'
-import IncomeDetails from '@/components/modals/IncomeDetails.vue'
-import ExpenseDetails from '@/components/modals/ExpenseDetails.vue'
-import PenaltyDetails from '@/components/modals/penaltyDetails.vue'
+import { FwbTab, FwbTabs, FwbHeading } from 'flowbite-vue'
+import IncomeTableComponent from '@/components/tables/IncomeTableComponent.vue'
+import ExpenseTableComponent from '@/components/tables/ExpenseTableComponent.vue'
+import PenaltyTableComponent from '@/components/tables/penaltyTableComponent.vue'
 
 const activeTab = ref('first')
 
@@ -44,50 +32,11 @@ watchEffect(async () => {
   penalties.value = penaltyResult
   materials.value = materialResult
 
-  totalIncome.value = incomeResult.reduce((acc, income) => acc + income.amount, 0)
-  totalExpense.value = expenseResult.reduce((acc, expense) => acc + expense.amount, 0)
+  totalIncome.value = incomeResult.reduce((acc, income) => acc + Number(income.amount), 0)
+  totalExpense.value = expenseResult.reduce((acc, expense) => acc + Number(expense.amount), 0)
   totalMaterial.value = materialResult.length
   totalRevenue.value = totalIncome.value - totalExpense.value
 })
-
-// income modal
-const isIncomeModalOpened = ref(false)
-const selectedIncome = ref<Income>()
-
-const openIncomeModal = (income: Income) => {
-  isIncomeModalOpened.value = true
-  selectedIncome.value = income
-}
-
-const closeIncomeModal = () => {
-  isIncomeModalOpened.value = false
-}
-
-// expense modal
-const isExpenseModalOpened = ref(false)
-const selectedExpense = ref<Expense>()
-
-const openExpenseModal = (expense: Expense) => {
-  isExpenseModalOpened.value = true
-  selectedExpense.value = expense
-}
-
-const closeExpenseModal = () => {
-  isExpenseModalOpened.value = false
-}
-
-// penalty modal
-const isPenaltyModalOpened = ref(false)
-const selectedPenalty = ref<Penalty>()
-
-const openPenaltyModal = (penalty: Penalty) => {
-  isPenaltyModalOpened.value = true
-  selectedPenalty.value = penalty
-}
-
-const closePenaltyModal = () => {
-  isPenaltyModalOpened.value = false
-}
 </script>
 <template>
   <div class="DashboardView flex flex-col space-y-8">
@@ -142,124 +91,15 @@ const closePenaltyModal = () => {
     <div>
       <fwb-tabs v-model="activeTab" variant="underline" class="p-5">
         <fwb-tab name="first" title="Income">
-          <fwb-table>
-            <fwb-table-head>
-              <fwb-table-head-cell>Income Date</fwb-table-head-cell>
-              <fwb-table-head-cell>Income Type</fwb-table-head-cell>
-              <fwb-table-head-cell>Amount</fwb-table-head-cell>
-              <fwb-table-head-cell>Payed By</fwb-table-head-cell>
-              <fwb-table-head-cell>Details</fwb-table-head-cell>
-            </fwb-table-head>
-            <fwb-table-body v-if="incomes.length">
-              <fwb-table-row v-for="income in incomes" :key="income.id">
-                <fwb-table-cell>{{ dateConvertor(income.createdAt) }}</fwb-table-cell>
-                <fwb-table-cell>{{ income.type }}</fwb-table-cell>
-                <fwb-table-cell>{{ income.amount }}</fwb-table-cell>
-                <fwb-table-cell>{{
-                  income.user.firstName + ' ' + income.user.lastName
-                }}</fwb-table-cell>
-                <fwb-table-cell>
-                  <FwbButton @click="openIncomeModal(income)" class="pr-3"> View </FwbButton>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-            <fwb-table-body v-else>
-              <fwb-table-row>
-                <fwb-table-cell colspan="6">
-                  <div class="flex h-40 w-full items-center justify-center border">
-                    No Incomes yet!
-                  </div>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-          </fwb-table>
+          <IncomeTableComponent :incomes="incomes" :visible="false" />
         </fwb-tab>
         <fwb-tab name="second" title="Expense">
-          <fwb-table>
-            <fwb-table-head>
-              <fwb-table-head-cell>Expense Date</fwb-table-head-cell>
-              <fwb-table-head-cell>Expense Type</fwb-table-head-cell>
-              <fwb-table-head-cell>Amount</fwb-table-head-cell>
-              <fwb-table-head-cell>Payed By</fwb-table-head-cell>
-              <fwb-table-head-cell>Payed For</fwb-table-head-cell>
-              <fwb-table-head-cell>Details</fwb-table-head-cell>
-            </fwb-table-head>
-            <fwb-table-body v-if="expenses.length">
-              <fwb-table-row v-for="expense in expenses" :key="expense.id">
-                <fwb-table-cell>{{ dateConvertor(expense.createdAt) }}</fwb-table-cell>
-                <fwb-table-cell class="capitalize">{{ expense.type }}</fwb-table-cell>
-                <fwb-table-cell>{{ expense.amount }}</fwb-table-cell>
-                <fwb-table-cell class="capitalize">{{
-                  expense.user !== null
-                    ? expense.user.firstName + ' ' + expense.user.lastName
-                    : '---'
-                }}</fwb-table-cell>
-                <fwb-table-cell class="capitalize">{{
-                  expense.material !== null ? expense.material.name : '---'
-                }}</fwb-table-cell>
-                <fwb-table-cell>
-                  <FwbButton @click="openExpenseModal(expense)" class="pr-3"> View </FwbButton>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-            <fwb-table-body v-else>
-              <fwb-table-row>
-                <fwb-table-cell colspan="6">
-                  <div class="flex h-40 w-full items-center justify-center border">
-                    No Expenses yet!
-                  </div>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-          </fwb-table>
+          <ExpenseTableComponent :expenses="expenses" :visible="false" />
         </fwb-tab>
         <fwb-tab name="third" title="Penalty">
-          <fwb-table>
-            <fwb-table-head>
-              <fwb-table-head-cell>Penalty Date</fwb-table-head-cell>
-              <fwb-table-head-cell>Amount</fwb-table-head-cell>
-              <fwb-table-head-cell>Payed By</fwb-table-head-cell>
-              <fwb-table-head-cell>Details</fwb-table-head-cell>
-            </fwb-table-head>
-            <fwb-table-body v-if="penalties.length">
-              <fwb-table-row v-for="penalty in penalties" :key="penalty.id">
-                <fwb-table-cell>{{ dateConvertor(penalty.createdAt) }}</fwb-table-cell>
-                <fwb-table-cell>{{ penalty.amount }}</fwb-table-cell>
-                <fwb-table-cell class="capitalize">{{
-                  penalty.user.firstName + ' ' + penalty.user.lastName
-                }}</fwb-table-cell>
-                <fwb-table-cell>
-                  <FwbButton @click="openPenaltyModal(penalty)" class="pr-3"> View </FwbButton>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-            <fwb-table-body v-else>
-              <fwb-table-row>
-                <fwb-table-cell colspan="6">
-                  <div class="flex h-40 w-full items-center justify-center border">
-                    No Penalties yet!
-                  </div>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-          </fwb-table>
+          <PenaltyTableComponent :penalties="penalties" :visible="false" />
         </fwb-tab>
       </fwb-tabs>
     </div>
   </div>
-  <IncomeDetails
-    :visible="isIncomeModalOpened"
-    @close="closeIncomeModal"
-    :income="selectedIncome"
-  />
-  <ExpenseDetails
-    :visible="isExpenseModalOpened"
-    @close="closeExpenseModal"
-    :expense="selectedExpense"
-  />
-  <PenaltyDetails
-    :visible="isPenaltyModalOpened"
-    @close="closePenaltyModal"
-    :penalty="selectedPenalty"
-  />
 </template>

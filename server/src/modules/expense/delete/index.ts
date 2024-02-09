@@ -9,20 +9,21 @@ export default adminProcedure
       id: true,
     })
   )
-  .mutation(async ({ input: { id }, ctx: { db } }) => {
-    const expense = await db.getRepository(Expense).findOne({
-      where: {
-        id,
-      },
-    })
-
-    if (!expense) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'expense not found',
+  .mutation(async ({ input: { id }, ctx: { db } }) =>
+    db.transaction(async () => {
+      const expense = await db.getRepository(Expense).findOne({
+        where: {
+          id,
+        },
       })
-    }
 
-    await db.getRepository(Expense).delete(id)
-    return expense
-  })
+      if (!expense) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'expense not found',
+        })
+      }
+      await db.getRepository(Expense).delete(id)
+      return expense
+    })
+  )

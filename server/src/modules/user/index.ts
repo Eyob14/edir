@@ -4,6 +4,7 @@ import signup from './signup'
 import approve from './approveUser'
 import find from './find'
 import getDetails from './details'
+import deleteUser from './delete'
 
 export default router({
   login,
@@ -11,4 +12,5 @@ export default router({
   approve,
   find,
   getDetails,
+  deleteUser,
 })

@@ -9,6 +9,7 @@ it('should create a new penalty', async () => {
 
   const adminUser = await db.getRepository(User).save(fakeAdmin())
   const user = await db.getRepository(User).save(fakeUser())
+
   const { create } = penaltyRouter.createCaller(authContext({ db }, adminUser))
 
   const penaltyCreated = await create({
@@ -17,11 +18,12 @@ it('should create a new penalty', async () => {
     paymentDate: new Date(),
     userEmail: user.email,
   })
+  console.log('Created', penaltyCreated)
 
   expect(penaltyCreated).toMatchObject({
     id: expect.any(Number),
     reason: 'Some reason',
     amount: 50,
-    paymentDate: expect.any(Date)
+    paymentDate: expect.any(Date),
   })
 })

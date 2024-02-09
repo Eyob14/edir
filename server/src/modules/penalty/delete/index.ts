@@ -10,19 +10,20 @@ export default adminProcedure
     })
   )
   .mutation(async ({ input: { id }, ctx: { db } }) => {
-    const penalty = await db.getRepository(Penalty).findOne({
-      where: {
-        id,
-      },
-    })
-
-    if (!penalty) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'penalty not found',
+    db.transaction(async () => {
+      const penalty = await db.getRepository(Penalty).findOne({
+        where: {
+          id,
+        },
       })
-    }
 
-    await db.getRepository(Penalty).delete(id)
-    return penalty
+      if (!penalty) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'penalty not found',
+        })
+      }
+      await db.getRepository(Penalty).delete(id)
+      return penalty
+    })
   })

@@ -2,7 +2,7 @@ import { fakeUser } from '@server/entities/tests/fakes'
 import { User } from '@server/entities/user'
 import { createTestDatabase } from '@tests/utils/database'
 import { authContext } from '@tests/utils/context'
-import relativeRouter from '..'
+import userRouter from '..'
 
 it('should return a list of users in the database', async () => {
   const db = await createTestDatabase()
@@ -18,7 +18,7 @@ it('should return a list of users in the database', async () => {
     }),
   ])
 
-  const { find } = relativeRouter.createCaller(authContext({ db }))
+  const { find } = userRouter.createCaller(authContext({ db }))
 
   const users = await find()
 

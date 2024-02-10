@@ -2,21 +2,21 @@ import { Expense } from '@server/entities'
 import { fakeExpense } from '@server/entities/tests/fakes'
 import { authContext } from '@tests/utils/context'
 import { createTestDatabase } from '@tests/utils/database'
-import expesneRouter from '..'
+import expenseRouter from '..'
 
 it('should update an expense', async () => {
   const db = await createTestDatabase()
 
   const expense = await db.getRepository(Expense).save(
     fakeExpense({
-      reason: 'Some description',
+      reason: 'Some reason',
       type: 'member payment',
       amount: 50,
     })
   )
 
   // Act
-  const { update } = expesneRouter.createCaller(authContext({ db }))
+  const { update } = expenseRouter.createCaller(authContext({ db }))
 
   const updatedExpense = await update({
     id: expense.id,

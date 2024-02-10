@@ -17,11 +17,11 @@ it('should delete an expense', async () => {
     })
   )
 
-  const { deleteIncome, find } = materialRouter.createCaller(
+  const { deleteExpense, find } = materialRouter.createCaller(
     authContext({ db }, adminUser)
   )
 
-  const deletedExpense = await deleteIncome({ id: expense.id })
+  const deletedExpense = await deleteExpense({ id: expense.id })
 
   const expenses = await find()
 

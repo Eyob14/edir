@@ -9,7 +9,7 @@ export default adminProcedure
       id: true,
     })
   )
-  .mutation(async ({ input: { id }, ctx: { db } }) => {
+  .mutation(async ({ input: { id }, ctx: { db } }) =>
     db.transaction(async () => {
       const penalty = await db.getRepository(Penalty).findOne({
         where: {
@@ -26,4 +26,4 @@ export default adminProcedure
       await db.getRepository(Penalty).delete(id)
       return penalty
     })
-  })
+  )

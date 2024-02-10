@@ -6,7 +6,7 @@ import { Penalty } from '../../../entities/penalty'
 
 export default adminProcedure
   .input(penaltyInsertSchema)
-  .mutation(async ({ input: newPenalty, ctx: { db } }) => {
+  .mutation(async ({ input: newPenalty, ctx: { db } }) =>
     db.transaction(async () => {
       const user = await db
         .getRepository(User)
@@ -28,4 +28,4 @@ export default adminProcedure
       await db.getRepository(Penalty).save(penalty)
       return penalty
     })
-  })
+  )

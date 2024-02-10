@@ -6,6 +6,7 @@ const userSeed = {
   email: 'existing@user.com',
   password: '$2b$10$sD53fzWIQBjXWfSDzuwmMOyY1ZAygLpRZlLxxPhcNG5r9BFWrNaDC',
   role: 'user',
+  isVerified: true
 }
 
 // Example using a mocked out db.
@@ -16,14 +17,6 @@ const db = {
   }),
 }
 
-// The same mocked db, but with a more declarative utility function,
-// which is easier to work with if we would have multiple repositories.
-// const db = createMockDatabase({
-//   User: {
-//     findOne: ({ where: { email } }: any) =>
-//       email === userSeed.email ? userSeed : null,
-//   },
-// })
 
 const { login } = usersRouter.createCaller({ db } as any)
 

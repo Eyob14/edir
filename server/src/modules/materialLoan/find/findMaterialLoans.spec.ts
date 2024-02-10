@@ -25,7 +25,7 @@ it('should return a list of material loans', async () => {
   // Act
   await db.getRepository(MaterialLoan).save([
     fakeMaterialLoan({
-      reason: 'Some reason',
+      reason: 'Some reason 1',
       requestedDate: new Date(),
       countTaken: 1,
       materialId: material.id,
@@ -33,7 +33,7 @@ it('should return a list of material loans', async () => {
       user,
     }),
     fakeMaterialLoan({
-      reason: 'Some reason',
+      reason: 'Some reason 2',
       requestedDate: new Date(),
       countTaken: 3,
       material,
@@ -49,7 +49,7 @@ it('should return a list of material loans', async () => {
   expect(materialLoans).toHaveLength(2)
   expect(materialLoans[0]).toMatchObject({
     id: expect.any(Number),
-    reason: 'Some reason',
+    reason: 'Some reason 1',
     requestedDate: expect.any(Date),
     countTaken: 1,
     countReturned: null,

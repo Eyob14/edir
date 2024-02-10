@@ -18,7 +18,7 @@ it('should create a new penalty', async () => {
     paymentDate: new Date(),
     userEmail: user.email,
   })
-  console.log('Created', penaltyCreated)
+
 
   expect(penaltyCreated).toMatchObject({
     id: expect.any(Number),

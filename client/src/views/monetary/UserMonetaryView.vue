@@ -13,9 +13,10 @@ import {
   FwbTab,
   FwbTabs,
 } from 'flowbite-vue'
-import IncomeDetailsModal from '@/components/modals/IncomeDetails.vue'
-import PenaltyDetailsModal from '@/components/modals/penaltyDetails.vue'
+import IncomeDetails from '@/components/modals/IncomeDetails.vue'
+import PenaltyTableComponent from '@/components/tables/penaltyTableComponent.vue'
 import { authUserId } from '../../stores/user'
+import { dateConvertor } from '@/utils/dateConvertor'
 
 const activeTab = ref('first')
 
@@ -24,7 +25,6 @@ const penalties = ref<Penalty[]>([])
 const userId = authUserId.value
 
 const selectedIncome = ref<Income>()
-const selectedPenalty = ref<Penalty>()
 
 onBeforeMount(async () => {
   if (userId) {
@@ -58,17 +58,7 @@ penalties.value.forEach((penalty) => {
   totalPenalty.value += penalty.amount
 })
 
-const isPenaltyModalOpened = ref(false)
 const isIncomeModalOpened = ref(false)
-
-const openPenaltyModal = (penalty: Penalty) => {
-  selectedPenalty.value = penalty
-  isPenaltyModalOpened.value = true
-}
-
-const closePenaltyModal = () => {
-  isPenaltyModalOpened.value = false
-}
 
 const openIncomeModal = (income: Income) => {
   selectedIncome.value = income
@@ -116,7 +106,6 @@ const closeIncomeModal = () => {
         </div>
       </div>
     </div>
-
     <!-- Table data -->
     <div>
       <fwb-tabs v-model="activeTab" variant="underline" class="p-5">
@@ -130,7 +119,7 @@ const closeIncomeModal = () => {
             </fwb-table-head>
             <fwb-table-body v-if="incomes.length">
               <fwb-table-row v-for="income in incomes" :key="income.id">
-                <fwb-table-cell>{{ income.createdAt }}</fwb-table-cell>
+                <fwb-table-cell>{{ dateConvertor(income.createdAt) }}</fwb-table-cell>
                 <fwb-table-cell>{{ income.type }}</fwb-table-cell>
                 <fwb-table-cell>{{ income.amount }}</fwb-table-cell>
                 <fwb-table-cell>
@@ -150,43 +139,14 @@ const closeIncomeModal = () => {
           </fwb-table>
         </fwb-tab>
         <fwb-tab name="second" title="Penalty">
-          <fwb-table>
-            <fwb-table-head>
-              <fwb-table-head-cell>Penalty Date</fwb-table-head-cell>
-              <fwb-table-head-cell>Amount</fwb-table-head-cell>
-              <fwb-table-head-cell>Details</fwb-table-head-cell>
-            </fwb-table-head>
-            <fwb-table-body v-if="penalties.length">
-              <fwb-table-row v-for="penalty in penalties" :key="penalty.id">
-                <fwb-table-cell>{{ penalty.createdAt }}</fwb-table-cell>
-                <fwb-table-cell>{{ penalty.amount }}</fwb-table-cell>
-                <fwb-table-cell>
-                  <FwbButton @click="openPenaltyModal(penalty)" class="pr-3"> View </FwbButton>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-            <fwb-table-body v-else>
-              <fwb-table-row>
-                <fwb-table-cell colspan="6">
-                  <div class="flex h-40 w-full items-center justify-center border">
-                    No Incomes yet!
-                  </div>
-                </fwb-table-cell>
-              </fwb-table-row>
-            </fwb-table-body>
-          </fwb-table>
+          <PenaltyTableComponent :penalties="penalties" :visible="false" />
         </fwb-tab>
       </fwb-tabs>
     </div>
   </div>
-  <IncomeDetailsModal
-    :isModalOpened="isIncomeModalOpened"
+  <IncomeDetails
+    :visible="isIncomeModalOpened"
     :income="selectedIncome"
-    :close="closeIncomeModal"
-  />
-  <PenaltyDetailsModal
-    :isModalOpened="isPenaltyModalOpened"
-    :penalty="selectedPenalty"
-    :close="closePenaltyModal"
+    @close="closeIncomeModal"
   />
 </template>

@@ -84,14 +84,14 @@ const closePenaltyModal = () => {
       <fwb-table-head>
         <fwb-table-head-cell>Penalty Date</fwb-table-head-cell>
         <fwb-table-head-cell>Amount</fwb-table-head-cell>
-        <fwb-table-head-cell>Payed By</fwb-table-head-cell>
+        <fwb-table-head-cell v-if="visible">Payed By</fwb-table-head-cell>
         <fwb-table-head-cell>Details</fwb-table-head-cell>
       </fwb-table-head>
       <fwb-table-body v-if="penalties.length">
         <fwb-table-row v-for="penalty in penalties" :key="penalty.id">
           <fwb-table-cell>{{ dateConvertor(penalty.createdAt) }}</fwb-table-cell>
           <fwb-table-cell>{{ penalty.amount }}</fwb-table-cell>
-          <fwb-table-cell class="capitalize">{{
+          <fwb-table-cell class="capitalize" v-if="visible">{{
             penalty.user.firstName + ' ' + penalty.user.lastName
           }}</fwb-table-cell>
           <fwb-table-cell>

@@ -24,7 +24,18 @@ import { dateConvertor } from '@/utils/dateConvertor'
           <p>Name: {{ relative.firstName }} {{ relative.lastName }}</p>
           <p>Email: {{ relative.email }}</p>
           <p>Age: {{ relative.age }}</p>
-          <p>Verification: {{ relative.isVerified ? 'Verified' : 'Unverified' }}</p>
+          <p>
+            Verification:
+            <span
+              class="p-2 text-white"
+              :class="{
+                'bg-green-500': relative.isVerified,
+                'bg-red-500': !relative.isVerified,
+              }"
+            >
+              {{ relative.isVerified ? 'Verified' : 'Unverified' }}
+            </span>
+          </p>
           <p>Created At: {{ dateConvertor(relative.createdAt) }}</p>
         </div>
       </div>

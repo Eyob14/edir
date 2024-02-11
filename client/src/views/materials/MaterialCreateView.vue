@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { FwbButton, FwbHeading, FwbInput, FwbTextarea } from 'flowbite-vue'
+import { FwbButton, FwbInput, FwbTextarea } from 'flowbite-vue'
 import AlertError from '@/components/AlertError.vue'
 import useErrorMessage from '@/composables/useErrorMessage'
 import { trpc } from '@/trpc'
 import { uploadImageToCloudinary } from '@/utils/fileUploader'
+import PageForm from '@/components/PageForm.vue'
 
 const router = useRouter()
+const buttonLoading = ref(false)
 
 const materialForm = ref({
   name: '',
@@ -21,6 +23,8 @@ const [createMaterial, errorMessage] = useErrorMessage(async () => {
   if (materialForm.value.materialPhoto === null) {
     return
   }
+  buttonLoading.value = true
+
   const uploadedImage = await uploadImageToCloudinary(materialForm.value.materialPhoto)
 
   const newMaterial = {
@@ -31,8 +35,8 @@ const [createMaterial, errorMessage] = useErrorMessage(async () => {
     boughtAt: new Date(materialForm.value.boughtAt),
   }
   await trpc.material.create.mutate(newMaterial)
-
-  router.push({ name: 'Material' })
+  buttonLoading.value = false
+  router.back()
 })
 
 const imageUrl = ref<string | undefined>(undefined)
@@ -54,19 +58,18 @@ function handleFileSelect(e: Event) {
 </script>
 
 <template>
-  <div class="flex items-center justify-between">
-    <form aria-label="Project" @submit.prevent="createMaterial">
+  <PageForm heading="Create New Material" formLabel="Create New Material" @submit="createMaterial">
+    <template #default>
       <div class="space-y-6">
-        <FwbHeading tag="h4">Create a new material</FwbHeading>
         <div class="flex justify-center">
           <label
-            for="profileImage"
+            for="materialImage"
             class="relative block h-40 w-40 cursor-pointer overflow-hidden rounded-full border-4 border-gray-200"
           >
             <img
               v-if="materialForm.materialPhoto"
               :src="imageUrl"
-              alt="Profile Image"
+              alt="Material Image"
               class="h-full w-full object-cover"
             />
             <div
@@ -89,8 +92,8 @@ function handleFileSelect(e: Event) {
               </svg>
             </div>
             <input
-              id="profileImage"
-              name="profileImage"
+              id="materialImage"
+              name="materialImage"
               type="file"
               accept="image/*"
               class="hidden"
@@ -134,14 +137,15 @@ function handleFileSelect(e: Event) {
       <AlertError :message="errorMessage" />
 
       <div class="mt-6 grid grid-cols-2 items-center gap-3">
-        <FwbButton type="submit">Create</FwbButton>
-        <RouterLink
+        <FwbButton
+          color="dark"
+          outline
           class="text-center text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          component="RouterLink"
-          :to="{ name: 'Material' }"
-          >Cancel</RouterLink
+          @click="router.back()"
+          >Cancel</FwbButton
         >
+        <FwbButton type="submit" :loading="buttonLoading">Create</FwbButton>
       </div>
-    </form>
-  </div>
+    </template>
+  </PageForm>
 </template>

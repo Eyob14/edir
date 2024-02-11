@@ -15,6 +15,7 @@ export default authenticatedProcedure
           id,
         },
       },
+      relations: ['user'],
     })) as Income[]
 
     return incomes

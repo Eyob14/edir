@@ -8,6 +8,7 @@ import { trpc } from '@/trpc'
 import { uploadImageToCloudinary } from '@/utils/fileUploader'
 import type { RelativeInsert } from '@mono/server/src/shared/entities'
 import PageForm from '@/components/PageForm.vue'
+import { Toast } from '@/utils/snackBarUtil'
 
 const router = useRouter()
 const buttonLoading = ref(false)
@@ -52,6 +53,10 @@ const [createNewRelative, errorMessage] = useErrorMessage(async () => {
 
   await trpc.relative.create.mutate(newRelative)
   buttonLoading.value = false
+  Toast.fire({
+    icon: 'success',
+    title: 'New Relative Created Successfully',
+  })
   router.back()
 })
 

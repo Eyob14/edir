@@ -71,9 +71,14 @@ const router = createRouter({
           component: () => import('../views/relatives/RelativesView.vue'),
         },
         {
-          path: 'RelativeCreate',
+          path: 'relativeCreate',
           name: 'RelativeCreate',
           component: () => import('../views/relatives/CreateRelative.vue'),
+        },
+        {
+          path: 'relativeUpdate/:id',
+          name: 'RelativeUpdate',
+          component: () => import('../views/relatives/UpdateRelative.vue'),
         },
         {
           path: 'profile',

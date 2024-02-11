@@ -4,7 +4,7 @@ import { trpc } from '@/trpc'
 import type { MaterialBare } from '@mono/server/src/shared/entities'
 import ModalComponent from '../../components/Modal.vue'
 import PageForm from '@/components/PageForm.vue'
-
+import { useRouter } from 'vue-router'
 import {
   FwbTable,
   FwbTableBody,
@@ -18,6 +18,9 @@ import {
   FwbAlert,
 } from 'flowbite-vue'
 import useErrorMessage from '@/composables/useErrorMessage'
+import { Toast } from '@/utils/snackBarUtil'
+
+const router = useRouter()
 
 const materials = ref<MaterialBare[]>([])
 const materialLoanForm = ref({
@@ -50,6 +53,11 @@ const [submitMaterialLoan, errorMessage] = useErrorMessage(async () => {
     materialId: materialLoanForm.value.materialId,
   }
   await trpc.materialLoan.create.mutate(newMaterialLoan)
+  Toast.fire({
+    icon: 'success',
+    title: 'Material Loan Created Successfully',
+  })
+  router.push({ name: 'UserMaterialLoan' })
   closeModal()
 })
 </script>
@@ -84,7 +92,6 @@ const [submitMaterialLoan, errorMessage] = useErrorMessage(async () => {
           <FwbButton
             component="RouterLink"
             tag="router-link"
-            data-testid="viewProjectBugs"
             :href="{ name: 'UserMaterialDetails', params: { id: material.id } } as any"
             class="pr-3"
           >
@@ -136,7 +143,7 @@ const [submitMaterialLoan, errorMessage] = useErrorMessage(async () => {
             />
           </div>
 
-          <FwbAlert v-if="errorMessage" data-testid="errorMessage" type="danger">
+          <FwbAlert v-if="errorMessage" type="danger">
             {{ errorMessage }}
           </FwbAlert>
           <div class="flex justify-end space-x-6">

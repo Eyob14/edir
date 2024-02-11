@@ -10,11 +10,11 @@ const closeModal = () => {
 <template>
   <ModalComponent :visible="visible" @close="closeModal">
     <template #header>
-      <FwbHeading tag="h4" class="text-center">Material Loan Details</FwbHeading>
+      <FwbHeading tag="h4" class="text-center">Income Details</FwbHeading>
     </template>
     <template #body>
       <div class="align-center flex flex-col justify-center space-y-3">
-        <div class="flex justify-between" v-if="income.user?.firstName">
+        <div class="flex justify-between">
           <p>User Name:</p>
           <p class="capitalize">{{ income.user?.firstName + ' ' + income.user?.lastName }}</p>
         </div>

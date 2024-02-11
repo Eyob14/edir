@@ -11,7 +11,7 @@ const closeModal = () => {
 <template>
   <ModalComponent :visible="visible" @close="closeModal">
     <template #header>
-      <FwbHeading tag="h4" class="text-center">Material Loan Details</FwbHeading>
+      <FwbHeading tag="h4" class="text-center">Expense Details</FwbHeading>
     </template>
     <template #body>
       <div class="align-center flex flex-col justify-center space-y-3">

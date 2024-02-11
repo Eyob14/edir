@@ -19,7 +19,7 @@ import { dateConvertor } from '@/utils/dateConvertor'
 import type { Relative, Income, MaterialLoan, User } from '@mono/server/src/shared/entities'
 import MaterialLoanModal from '@/components/modals/MaterialLoan.vue'
 import IncomeDetails from '@/components/modals/IncomeDetails.vue'
-
+import IncomeTableComponent from '@/components/tables/IncomeTableComponent.vue'
 
 const route = useRoute()
 const userId = Number(route.params.id)
@@ -67,16 +67,6 @@ const closeRelativeModal = () => {
   isRelativeModalOpened.value = false
 }
 
-const isIncomeModalOpened = ref(false)
-const selectedIncome = ref<Income>()
-
-const openIncomeModal = (income: Income) => {
-  isIncomeModalOpened.value = true
-  selectedIncome.value = income
-}
-const closeIncomeModal = () => {
-  isIncomeModalOpened.value = false
-}
 
 const isMaterialLoanModalOpened = ref(false)
 const selectedMaterialLoan = ref<MaterialLoan>()
@@ -166,33 +156,7 @@ const closeMaterialLoanModal = () => {
             </fwb-table>
           </fwb-tab>
           <fwb-tab name="second" title="Payment">
-            <fwb-table>
-              <fwb-table-head>
-                <fwb-table-head-cell>Income Date</fwb-table-head-cell>
-                <fwb-table-head-cell>Income Type</fwb-table-head-cell>
-                <fwb-table-head-cell>Amount</fwb-table-head-cell>
-                <fwb-table-head-cell>Details</fwb-table-head-cell>
-              </fwb-table-head>
-              <fwb-table-body v-if="incomes.length">
-                <fwb-table-row v-for="income in incomes" :key="income.id">
-                  <fwb-table-cell>{{ dateConvertor(income.createdAt) }}</fwb-table-cell>
-                  <fwb-table-cell>{{ income.type }}</fwb-table-cell>
-                  <fwb-table-cell>{{ income.amount }}</fwb-table-cell>
-                  <fwb-table-cell>
-                    <FwbButton @click="openIncomeModal(income)">View</FwbButton>
-                  </fwb-table-cell>
-                </fwb-table-row>
-              </fwb-table-body>
-              <fwb-table-body v-else>
-                <fwb-table-row>
-                  <fwb-table-cell colspan="6">
-                    <div class="flex h-40 w-full items-center justify-center border">
-                      No Incomes yet!
-                    </div>
-                  </fwb-table-cell>
-                </fwb-table-row>
-              </fwb-table-body>
-            </fwb-table>
+            <IncomeTableComponent :incomes="incomes" :visible="false" />
           </fwb-tab>
           <fwb-tab name="third" title="Material Loan">
             <fwb-table>
@@ -265,10 +229,5 @@ const closeMaterialLoanModal = () => {
     :visible="isMaterialLoanModalOpened"
     @close="closeMaterialLoanModal"
     :materialLoan="selectedMaterialLoan"
-  />
-  <IncomeDetails
-    :visible="isIncomeModalOpened"
-    @close="closeIncomeModal"
-    :income="selectedIncome"
   />
 </template>

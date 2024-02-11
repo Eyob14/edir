@@ -16,19 +16,47 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <div v-if="user" class="flex justify-between">
+  <div v-if="user" class="flex space-x-4">
     <div class="w-1/2">
-      <div class="w-3/5">
+      <div>
         <img v-if="user.profileImage" :src="user.profileImage" alt="Profile Image" />
       </div>
     </div>
-    <div class="flex w-1/2 flex-col space-y-4">
-      <p>Name: {{ user.firstName }} {{ user.lastName }}</p>
-      <p>Email: {{ user.email }}</p>
-      <p>Age: {{ user.age }}</p>
-      <p>Verification: {{ user.isVerified ? 'Verified' : 'Unverified' }}</p>
-      <p>Number of Relatives: {{ user.relatives.length }}</p>
-      <p>Created At: {{ dateConvertor(user.createdAt) }}</p>
+    <div class="flex w-1/2 flex-col justify-center border space-y-4 px-10">
+      <div class="flex space-x-6">
+        <p>Name:</p>
+        <p>{{ user.firstName }} {{ user.lastName }}</p>
+      </div>
+      <div class="flex space-x-6">
+        <p>Email:</p>
+        <p>{{ user.email }}</p>
+      </div>
+      <div class="flex space-x-6">
+        <p>Age:</p>
+        <p>{{ user.age }}</p>
+      </div>
+      <div class="flex space-x-6">
+        <p>Verification:</p>
+        <p>
+          <span
+            class="p-2 text-white"
+            :class="{
+              'bg-green-500': user.isVerified,
+              'bg-red-500': !user.isVerified,
+            }"
+          >
+            {{ user.isVerified ? 'Verified' : 'Unverified' }}
+          </span>
+        </p>
+      </div>
+      <div class="flex space-x-6">
+        <p>Number of Relatives:</p>
+        <p>{{ user.relatives.length }}</p>
+      </div>
+      <div class="flex space-x-6">
+        <p>Created At:</p>
+        <p>{{ dateConvertor(user.createdAt) }}</p>
+      </div>
     </div>
   </div>
 </template>

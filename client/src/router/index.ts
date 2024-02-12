@@ -4,6 +4,7 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import HomeLayout from '@/layouts/HomeLayout.vue'
 import { authenticate } from './guards'
 import UserDashboardLayoutVue from '@/layouts/UserDashboardLayout.vue'
+import { isLoggedIn, authUserRole } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,15 +54,45 @@ const router = createRouter({
           name: 'UpdatePenalty',
           component: () => import('../views/monetary/update/UpdatePenaltyView.vue'),
         },
+        {
+          path: 'material',
+          name: 'Material',
+          component: () => import('../views/materials/MaterialView.vue'),
+        },
+        {
+          path: 'details/:id',
+          name: 'MaterialDetails',
+          component: () => import('../views/materials/MaterialDetails.vue'),
+        },
+        {
+          path: 'create',
+          name: 'MaterialCreate',
+          component: () => import('../views/materials/MaterialCreateView.vue'),
+        },
+        {
+          path: 'materialLoan',
+          name: 'MaterialLoan',
+          component: () => import('../views/materials/MaterialLoanView.vue'),
+        },
+        {
+          path: 'user',
+          name: 'User',
+          component: () => import('../views/users/UserView.vue'),
+        },
+        {
+          path: 'userDetails/:id',
+          name: 'UserDetails',
+          component: () => import('../views/users/UserDetailView.vue'),
+        },
       ],
     },
     {
-      path: '',
+      path: '/userDashboard',
       component: UserDashboardLayoutVue,
       beforeEnter: [authenticate],
       children: [
         {
-          path: 'userMonetary',
+          path: '',
           name: 'UserMonetary',
           component: () => import('../views/monetary/UserMonetaryView.vue'),
         },
@@ -103,50 +134,21 @@ const router = createRouter({
       ],
     },
     {
-      path: '/material',
-      component: DashboardLayout,
-      beforeEnter: [authenticate],
-      children: [
-        {
-          path: '',
-          name: 'Material',
-          component: () => import('../views/materials/MaterialView.vue'),
-        },
-        {
-          path: 'details/:id',
-          name: 'MaterialDetails',
-          component: () => import('../views/materials/MaterialDetails.vue'),
-        },
-        {
-          path: 'create',
-          name: 'MaterialCreate',
-          component: () => import('../views/materials/MaterialCreateView.vue'),
-        },
-        {
-          path: 'materialLoan',
-          name: 'MaterialLoan',
-          component: () => import('../views/materials/MaterialLoanView.vue'),
-        },
-      ],
-    },
-    {
-      path: '/user',
-      component: DashboardLayout,
-      beforeEnter: [authenticate],
-      children: [
-        {
-          path: '',
-          name: 'User',
-          component: () => import('../views/users/UserView.vue'),
-        },
-        {
-          path: 'userDetails/:id',
-          name: 'UserDetails',
-          component: () => import('../views/users/UserDetailView.vue'),
-        },
-      ],
-    },
-    {
+      beforeEnter: (to, from) => {
+        if (isLoggedIn.value) {
+          if (from.name) {
+            return { name: from.name }
+          } else if (authUserRole.value === 'admin') {
+            return '/dashboard'
+          } else if (authUserRole.value === 'user') {
+            return '/userDashboard'
+          } else {
+            return false
+          }
+        } else {
+          return true
+        }
+      },
       path: '/login',
       name: 'Login',
       component: () => import('../views/authentication/LoginView.vue'),
@@ -159,6 +161,15 @@ const router = createRouter({
     {
       path: '',
       component: HomeLayout,
+      beforeEnter: (to, from) => {
+        if (isLoggedIn.value && authUserRole.value === 'admin') {
+          return '/dashboard'
+        } else if (isLoggedIn.value && authUserRole.value === 'user') {
+          return '/userDashboard'
+        } else {
+          return true
+        }
+      },
       children: [
         {
           path: '',

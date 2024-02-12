@@ -1,8 +1,0 @@
-API end points:
-Relative related end points:
-    - create Relative -- Done
-    - approve relative -- Done
-    - update Relative -- Done
-    - get list of relatives -- Done
-    - delete Relative -- Done
-

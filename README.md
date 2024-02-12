@@ -1,3 +1,28 @@
+# Edir
+
+![Preview](README/github-preview.gif)
+
+
+## Purpose
+
+**Edir** is the modern approach of Ethiopian tradition which brings people together during funerals to help each other. The web app provides a modern way and shares Ethiopians people tradition with other cultures around the world. The platform is easy to access and can be customized for the specific needs of the culture. It allows people to cover their expenses during funeral ceremonies.
+
+### Running the project
+
+The project is structured into 2 workspaces:
+
+- frontend
+- backend
+
+#### Frontend prerequisites
+
+- [node ^20](https://nodejs.org/en)
+
+#### Backend prerequisites
+
+- [node ^20](https://nodejs.org/en)
+- [postgresql](https://postgresql.org)
+
 ## Setup
 
 1. `npm install`
@@ -39,3 +64,9 @@ In development mode:
 ```bash
 npm run dev
 ```
+
+### Technologies used
+
+- [vue.js](https://vuejs.org/)
+- [Node.js](https://nodejs.org/en)
+- [postgresql.org](https://www.postgresql.org/)

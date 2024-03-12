@@ -17,6 +17,9 @@ export function createDatabase(
     entities,
     migrations: [relative('./migrations/**/*.ts')],
     namingStrategy: new SnakeNamingStrategy(),
+    ssl: {
+      rejectUnauthorized: false,
+    },
 
     // overrides
     ...options,

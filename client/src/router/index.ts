@@ -161,7 +161,7 @@ const router = createRouter({
     {
       path: '',
       component: HomeLayout,
-      beforeEnter: (to, from) => {
+      beforeEnter: () => {
         if (isLoggedIn.value && authUserRole.value === 'admin') {
           return '/dashboard'
         } else if (isLoggedIn.value && authUserRole.value === 'user') {

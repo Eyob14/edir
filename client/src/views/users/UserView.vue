@@ -83,7 +83,9 @@ async function deleteUser(userId: number) {
       </fwb-table-head>
       <fwb-table-body v-if="users.length">
         <fwb-table-row v-for="user in users" :key="user.id">
-          <fwb-table-cell>{{ user.firstName + ' ' + user.lastName }}</fwb-table-cell>
+          <fwb-table-cell class="capitalize">{{
+            user.firstName + ' ' + user.lastName
+          }}</fwb-table-cell>
           <fwb-table-cell>{{ user.email }}</fwb-table-cell>
           <fwb-table-cell>{{ user.age }}</fwb-table-cell>
           <fwb-table-cell>

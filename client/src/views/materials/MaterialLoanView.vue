@@ -20,6 +20,7 @@ import { DEFAULT_SERVER_ERROR } from '@/consts'
 import ModalComponent from '@/components/Modal.vue'
 import PageForm from '@/components/PageForm.vue'
 import { dateConvertor } from '@/utils/dateConvertor'
+import { Toast } from '@/utils/snackBarUtil'
 
 const materialLoans = ref<MaterialLoan[]>([])
 const selectedMaterialLoan = ref<MaterialLoan>()
@@ -56,16 +57,33 @@ const closeEditModal = () => {
   isEditModalOpened.value = false
 }
 
+const editButtonLoading = ref(false)
+
 const [submitEditMaterialLoan, editErrorMessage] = useErrorMessage(async () => {
-  const updatedMaterialLoan = {
-    countTaken: parseInt(materialLoanForm.value.countTaken),
-    id: materialLoanForm.value.id,
-    requestedDate: new Date(selectedMaterialLoan.value?.requestedDate!),
-    reason: selectedMaterialLoan.value?.reason!,
+  try {
+    editButtonLoading.value = true
+    const updatedMaterialLoan = {
+      countTaken: parseInt(materialLoanForm.value.countTaken),
+      id: materialLoanForm.value.id,
+      requestedDate: new Date(selectedMaterialLoan.value?.requestedDate!),
+      reason: selectedMaterialLoan.value?.reason!,
+    }
+    await trpc.materialLoan.update.mutate(updatedMaterialLoan)
+    editButtonLoading.value = false
+    materialLoans.value = await trpc.materialLoan.find.query()
+    closeEditModal()
+    Toast.fire({
+      icon: 'success',
+      title: 'Material loan updated successfully',
+    })
+  } catch (error) {
+    editButtonLoading.value = false
+    Toast.fire({
+      icon: 'error',
+      title: 'Could not update material loan!',
+    })
+    throw error
   }
-  await trpc.materialLoan.update.mutate(updatedMaterialLoan)
-  materialLoans.value = await trpc.materialLoan.find.query()
-  closeEditModal()
 })
 
 const materialLoanReturnForm = ref({
@@ -81,27 +99,53 @@ const openReturnModal = (materialLoan: MaterialLoan) => {
 const closeReturnModal = () => {
   isReturnModalOpened.value = false
 }
-
+const returnButtonLoading = ref(false)
 const [submitReturnMaterialLoan, returnErrorMessage] = useErrorMessage(async () => {
-  const returnMaterialLoan = {
-    countReturned: parseInt(materialLoanReturnForm.value.countReturned),
-    id: materialLoanReturnForm.value.id,
-    description: materialLoanReturnForm.value?.description!,
+  try {
+    returnButtonLoading.value = true
+    const returnMaterialLoan = {
+      countReturned: parseInt(materialLoanReturnForm.value.countReturned),
+      id: materialLoanReturnForm.value.id,
+      description: materialLoanReturnForm.value?.description!,
+    }
+    await trpc.materialLoan.returnMaterialLoan.mutate(returnMaterialLoan)
+    returnButtonLoading.value = false
+    materialLoans.value = await trpc.materialLoan.find.query()
+    closeReturnModal()
+    Toast.fire({
+      icon: 'success',
+      title: 'Material loan returned successfully',
+    })
+  } catch (error) {
+    returnButtonLoading.value = false
+    Toast.fire({
+      icon: 'error',
+      title: 'Could not return material loan!',
+    })
+    throw error
   }
-  await trpc.materialLoan.returnMaterialLoan.mutate(returnMaterialLoan)
-  materialLoans.value = await trpc.materialLoan.find.query()
-  closeReturnModal()
 })
 
-async function verifyMaterialLoan(materialLoanId: number) {
+const approveButtonLoading = ref(false)
+async function approveMaterialLoan(materialLoanId: number) {
   try {
+    approveButtonLoading.value = true
     await trpc.materialLoan.approveMaterialLoan.mutate({ id: materialLoanId })
+    approveButtonLoading.value = false
+    materialLoans.value = await trpc.materialLoan.find.query()
+    Toast.fire({
+      icon: 'success',
+      title: 'Material loan approved successfully',
+    })
   } catch (error) {
+    approveButtonLoading.value = false
+    Toast.fire({
+      icon: 'error',
+      title: 'Could not approve material loan!',
+    })
     errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
   }
 }
-
-// const [verifyMaterialLoan, errorMessage] = useErrorMessage(async () => {})
 </script>
 
 <template>
@@ -148,7 +192,8 @@ async function verifyMaterialLoan(materialLoanId: number) {
           <fwb-button
             v-if="!materialLoan.isApproved"
             color="yellow"
-            @click="verifyMaterialLoan(materialLoan.id)"
+            @click="approveMaterialLoan(materialLoan.id)"
+            :loading="approveButtonLoading"
             >Approve</fwb-button
           >
           <fwb-button v-else color="green" disabled>Approved</fwb-button>
@@ -208,12 +253,14 @@ async function verifyMaterialLoan(materialLoanId: number) {
             placeholder="Material count"
           />
 
-          <FwbAlert v-if="editErrorMessage" data-testid="errorMessage" type="danger">
+          <FwbAlert v-if="editErrorMessage" type="danger">
             {{ editErrorMessage }}
           </FwbAlert>
           <div class="flex justify-end space-x-6">
             <fwb-button @click="closeEditModal" color="alternative"> Cancel </fwb-button>
-            <fwb-button type="submit" color="green"> Update </fwb-button>
+            <fwb-button type="submit" color="green" :loading="editButtonLoading">
+              Update
+            </fwb-button>
           </div>
         </template>
       </PageForm>
@@ -252,12 +299,14 @@ async function verifyMaterialLoan(materialLoanId: number) {
             />
           </div>
 
-          <FwbAlert v-if="returnErrorMessage" data-testid="errorMessage" type="danger">
+          <FwbAlert v-if="returnErrorMessage" type="danger">
             {{ returnErrorMessage }}
           </FwbAlert>
           <div class="flex justify-end space-x-6">
             <fwb-button @click="closeReturnModal" color="alternative"> Cancel </fwb-button>
-            <fwb-button type="submit" color="green"> Return </fwb-button>
+            <fwb-button type="submit" color="green" :loading="returnButtonLoading">
+              Return
+            </fwb-button>
           </div>
         </template>
       </PageForm>

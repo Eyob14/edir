@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   FwbNavbar,
   FwbNavbarCollapse,
   FwbNavbarLink,
   FwbFooter,
-  FwbFooterCopyright
+  FwbFooterCopyright,
 } from 'flowbite-vue'
 
 const { links } = defineProps<{
@@ -19,11 +19,21 @@ const { links } = defineProps<{
 
 const route = useRoute()
 
-const navigation = computed(() => {
-  return links.map((item) => ({
+const navigation = computed(() =>
+  links.map((item) => ({
     ...item,
     isActive: route.name === item.name,
   }))
+)
+
+function changeActiveLink(name: string) {
+  navigation.value.forEach((link) => {
+    link.isActive = link.name === name
+  })
+}
+
+watchEffect(() => {
+  changeActiveLink(route.name as string)
 })
 </script>
 

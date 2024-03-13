@@ -15,9 +15,13 @@ const closeModal = () => {
     </template>
     <template #body>
       <div class="align-center flex flex-col justify-center space-y-3">
-        <div class="flex justify-between">
+        <div class="flex justify-between" v-if="expense?.user">
           <p>User Name:</p>
-          <p class="capitalize">{{ expense.user.firstName + ' ' + expense.user.lastName }}</p>
+          <p class="capitalize">{{ expense?.user?.firstName + ' ' + expense?.user?.lastName }}</p>
+        </div>
+        <div class="flex justify-between" v-if="expense?.material">
+          <p>Material Name:</p>
+          <p class="capitalize">{{ expense?.material?.name }}</p>
         </div>
         <div class="flex justify-between">
           <p>Expense Amount:</p>

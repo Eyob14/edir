@@ -35,29 +35,42 @@ const relativeForm = ref({
 })
 
 const [createNewRelative, errorMessage] = useErrorMessage(async () => {
-  if (relativeForm.value.relativePhoto === null) {
-    return
+  try {
+    if (relativeForm.value.relativePhoto === null) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Relative photo is required!',
+      })
+      return
+    }
+    buttonLoading.value = true
+    const uploadedImage = await uploadImageToCloudinary(relativeForm.value.relativePhoto)
+
+    const newRelative = {
+      firstName: relativeForm.value.firstName,
+      lastName: relativeForm.value.lastName,
+      email: relativeForm.value.email,
+      age: parseInt(relativeForm.value.age),
+      type: selected.value as RelativeInsert['type'],
+      description: relativeForm.value.description,
+      relativePhoto: uploadedImage,
+    } as RelativeInsert
+
+    await trpc.relative.create.mutate(newRelative)
+    buttonLoading.value = false
+    Toast.fire({
+      icon: 'success',
+      title: 'New Relative Created Successfully',
+    })
+    router.back()
+  } catch (error) {
+    buttonLoading.value = false
+    Toast.fire({
+      icon: 'error',
+      title: 'Could not create a new relative!',
+    })
+    throw error
   }
-  buttonLoading.value = true
-  const uploadedImage = await uploadImageToCloudinary(relativeForm.value.relativePhoto)
-
-  const newRelative = {
-    firstName: relativeForm.value.firstName,
-    lastName: relativeForm.value.lastName,
-    email: relativeForm.value.email,
-    age: parseInt(relativeForm.value.age),
-    type: selected.value as RelativeInsert['type'],
-    description: relativeForm.value.description,
-    relativePhoto: uploadedImage,
-  } as RelativeInsert
-
-  await trpc.relative.create.mutate(newRelative)
-  buttonLoading.value = false
-  Toast.fire({
-    icon: 'success',
-    title: 'New Relative Created Successfully',
-  })
-  router.back()
 })
 
 const imageUrl = ref<string | undefined>(undefined)

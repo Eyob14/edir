@@ -12,6 +12,7 @@ import {
   FwbButton,
 } from 'flowbite-vue'
 import MaterialLoanModal from '@/components/modals/MaterialLoan.vue'
+import { dateConvertor } from '@/utils/dateConvertor'
 
 const materialLoans = ref<MaterialLoan[]>([])
 const selectedMaterialLoan = ref<MaterialLoan>()
@@ -43,7 +44,7 @@ const closeModal = () => {
     </fwb-table-head>
     <fwb-table-body v-if="materialLoans.length">
       <fwb-table-row v-for="materialLoan in materialLoans" :key="materialLoan.id">
-        <fwb-table-cell>{{ materialLoan.material.name }}</fwb-table-cell>
+        <fwb-table-cell class="capitalize">{{ materialLoan.material.name }}</fwb-table-cell>
         <fwb-table-cell>{{ materialLoan.countTaken }}</fwb-table-cell>
         <fwb-table-cell>
           <span
@@ -56,7 +57,7 @@ const closeModal = () => {
           </span>
         </fwb-table-cell>
         <fwb-table-cell>
-          {{ materialLoan.requestedDate }}
+          {{ dateConvertor(materialLoan.requestedDate) }}
         </fwb-table-cell>
         <fwb-table-cell>
           <FwbButton class="pr-3" @click="openModal(materialLoan)"> View </FwbButton>
@@ -71,5 +72,9 @@ const closeModal = () => {
       </fwb-table-row>
     </fwb-table-body>
   </fwb-table>
-  <MaterialLoanModal :visible="isModalOpened" @close="closeModal" :materialLoan="selectedMaterialLoan" />
+  <MaterialLoanModal
+    :visible="isModalOpened"
+    @close="closeModal"
+    :materialLoan="selectedMaterialLoan"
+  />
 </template>

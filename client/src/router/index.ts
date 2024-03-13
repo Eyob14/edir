@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import HomeLayout from '@/layouts/HomeLayout.vue'
-import { authenticate } from './guards'
+import { authenticateAdmin, authenticateUser } from './guards'
 import UserDashboardLayoutVue from '@/layouts/UserDashboardLayout.vue'
 import { isLoggedIn, authUserRole } from '@/stores/user'
 
@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/dashboard',
       component: DashboardLayout,
-      beforeEnter: [authenticate],
+      beforeEnter: [authenticateAdmin],
       children: [
         {
           path: '',
@@ -89,7 +89,7 @@ const router = createRouter({
     {
       path: '/userDashboard',
       component: UserDashboardLayoutVue,
-      beforeEnter: [authenticate],
+      beforeEnter: [authenticateUser],
       children: [
         {
           path: '',
@@ -179,6 +179,18 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  if (!isLoggedIn.value) {
+    if (to.name === 'Login' || to.name === 'Signup') {
+      next()
+    } else {
+      next({ name: 'Login' })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

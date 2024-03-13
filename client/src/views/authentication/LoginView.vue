@@ -6,6 +6,7 @@ import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
 import useErrorMessage from '@/composables/useErrorMessage'
 import { authUserRole } from '../../stores/user'
+import { error } from 'console'
 
 const router = useRouter()
 
@@ -13,20 +14,27 @@ const userForm = ref({
   email: '',
   password: '',
 })
+const buttonLoading = ref(false)
 
-const [submitLogin, errorMessage] = useErrorMessage(async () => {
-  await login(userForm.value)
-
-  if (authUserRole.value == 'admin') {
-    router.push({ name: 'Dashboard' })
-  } else {
-    router.push({ name: 'UserMonetary' })
+const [loginForm, errorMessage] = useErrorMessage(async () => {
+  try {
+    buttonLoading.value = true
+    await login(userForm.value)
+    buttonLoading.value = false
+    if (authUserRole.value == 'admin') {
+      router.push({ name: 'Dashboard' })
+    } else {
+      router.push({ name: 'UserMonetary' })
+    }
+  } catch (error) {
+    buttonLoading.value = false
+    throw error
   }
 })
 </script>
 
 <template>
-  <PageForm heading="Log in to your account" formLabel="Login" @submit="submitLogin">
+  <PageForm heading="Log in to your account" formLabel="Login" @submit="loginForm">
     <template #default>
       <FwbInput label="Email" type="email" v-model="userForm.email" :required="true" />
 
@@ -40,12 +48,14 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
         :required="true"
       />
 
-      <FwbAlert v-if="errorMessage" data-testid="errorMessage" type="danger">
+      <FwbAlert v-if="errorMessage" type="danger">
         {{ errorMessage }}
       </FwbAlert>
 
       <div class="grid">
-        <FwbButton color="default" type="submit" size="xl">Log in</FwbButton>
+        <FwbButton color="default" type="submit" :loading="buttonLoading" size="xl"
+          >Log in</FwbButton
+        >
       </div>
     </template>
 

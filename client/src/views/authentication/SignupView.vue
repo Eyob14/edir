@@ -3,9 +3,10 @@ import { ref } from 'vue'
 import PageForm from '@/components/PageForm.vue'
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import type AlertError from '@/components/AlertError.vue'
-import { DEFAULT_SERVER_ERROR } from '@/consts'
 import { signup } from '@/stores/user'
 import { uploadImageToCloudinary } from '@/utils/fileUploader'
+import useErrorMessage from '@/composables/useErrorMessage'
+import { Toast } from '@/utils/snackBarUtil'
 
 const userForm = ref({
   firstName: '',
@@ -18,7 +19,8 @@ const userForm = ref({
 })
 
 const hasSucceeded = ref(false)
-const errorMessage = ref('')
+const buttonLoading = ref(false)
+
 const imageUrl = ref<string | undefined>(undefined)
 
 function handleFileSelect(e: Event) {
@@ -36,12 +38,24 @@ function handleFileSelect(e: Event) {
   }
 }
 
-async function submitSignup() {
+const [submitSignup, errorMessage] = useErrorMessage(async () => {
   try {
     if (userForm.value.profile === null) {
-      return;
+      Toast.fire({
+        icon: 'error',
+        title: 'Profile image is required!',
+      })
+      return
     }
-    const uploadedImage = await uploadImageToCloudinary(userForm.value.profile);
+    if (userForm.value.password !== userForm.value.confirmPassword) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Passwords do not match!',
+      })
+      return
+    }
+    buttonLoading.value = true
+    const uploadedImage = await uploadImageToCloudinary(userForm.value.profile)
 
     const newUserData = {
       firstName: userForm.value.firstName,
@@ -52,18 +66,16 @@ async function submitSignup() {
       profileImage: uploadedImage,
     }
     await signup(newUserData)
-
-    errorMessage.value = ''
-
+    buttonLoading.value = false
     hasSucceeded.value = true
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
+    buttonLoading.value = false
   }
-}
+})
 </script>
 
 <template>
-  <PageForm heading="Create an account" formLabel="Signup" @submit="submitSignup">
+  <PageForm heading="Create New Account" formLabel="Signup" @submit="submitSignup">
     <template #default>
       <div class="flex justify-center">
         <label
@@ -141,7 +153,9 @@ async function submitSignup() {
       </AlertError>
 
       <div class="grid">
-        <FwbButton color="default" type="submit" size="xl">Sign up</FwbButton>
+        <FwbButton color="default" type="submit" :loading="buttonLoading" size="xl"
+          >Sign up</FwbButton
+        >
       </div>
     </template>
 

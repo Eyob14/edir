@@ -45,20 +45,33 @@ const closeModal = () => {
   isModalOpened.value = false
 }
 
+const buttonLoading = ref(false)
+
 const [submitMaterialLoan, errorMessage] = useErrorMessage(async () => {
-  const newMaterialLoan = {
-    reason: materialLoanForm.value.reason,
-    countTaken: parseInt(materialLoanForm.value.countTaken),
-    requestedDate: new Date(materialLoanForm.value.requestedDate),
-    materialId: materialLoanForm.value.materialId,
+  try {
+    buttonLoading.value = true
+    const newMaterialLoan = {
+      reason: materialLoanForm.value.reason,
+      countTaken: parseInt(materialLoanForm.value.countTaken),
+      requestedDate: new Date(materialLoanForm.value.requestedDate),
+      materialId: materialLoanForm.value.materialId,
+    }
+    await trpc.materialLoan.create.mutate(newMaterialLoan)
+    buttonLoading.value = false
+    Toast.fire({
+      icon: 'success',
+      title: 'Material Loan Created Successfully',
+    })
+    router.push({ name: 'UserMaterialLoan' })
+    closeModal()
+  } catch (error) {
+    buttonLoading.value = false
+    Toast.fire({
+      icon: 'error',
+      title: 'Could not create Material Loan!',
+    })
+    throw error
   }
-  await trpc.materialLoan.create.mutate(newMaterialLoan)
-  Toast.fire({
-    icon: 'success',
-    title: 'Material Loan Created Successfully',
-  })
-  router.push({ name: 'UserMaterialLoan' })
-  closeModal()
 })
 </script>
 
@@ -73,7 +86,7 @@ const [submitMaterialLoan, errorMessage] = useErrorMessage(async () => {
     </fwb-table-head>
     <fwb-table-body v-if="materials.length">
       <fwb-table-row v-for="material in materials" :key="material.id">
-        <fwb-table-cell>{{ material.name }}</fwb-table-cell>
+        <fwb-table-cell class="capitalize">{{ material.name }}</fwb-table-cell>
         <fwb-table-cell>{{ material.remainingCount }}</fwb-table-cell>
         <fwb-table-cell>
           <span
@@ -148,7 +161,7 @@ const [submitMaterialLoan, errorMessage] = useErrorMessage(async () => {
           </FwbAlert>
           <div class="flex justify-end space-x-6">
             <fwb-button @click="closeModal" color="alternative"> Cancel </fwb-button>
-            <fwb-button type="submit" color="green"> Create </fwb-button>
+            <fwb-button type="submit" color="green" :loading="buttonLoading"> Create </fwb-button>
           </div>
         </template>
       </PageForm>

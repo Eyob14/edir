@@ -82,7 +82,7 @@ const [createNewExpense, errorMessage] = useErrorMessage(async () => {
             v-model="expenseForm.reason"
             :rows="4"
             :minlength="2"
-            label="Income description"
+            label="Expense description"
             placeholder="Write your description..."
             :required="true"
           />

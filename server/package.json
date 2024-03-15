@@ -14,7 +14,7 @@
     "test": "npm run test:mem",
     "test:mem": "DB_TYPE=pg-mem vitest",
     "test:db": "vitest",
-    "typecheck": "tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

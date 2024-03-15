@@ -1,5 +1,5 @@
 import { Material } from '@server/entities'
-import { MaterialBare } from '@server/entities/material'
+import type { MaterialBare } from '@server/entities/material'
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 
 export default authenticatedProcedure.query(

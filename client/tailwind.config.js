@@ -1,5 +1,6 @@
 import flowbitePlugin from 'flowbite/plugin'
 
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -19,4 +20,4 @@ export default {
       mono: ['"Fira Code"', 'monospace'],
     },
   },
-}
+};

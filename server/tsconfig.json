@@ -1,19 +1,15 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
-  
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "..",
-
     "module": "ES2022",
     "target": "ES2022",
     "moduleResolution": "Bundler",
-
     "experimentalDecorators": true,
     "strict": true,
     "strictPropertyInitialization": false,
     "outDir": "dist",
-    
     "types": [
       "vitest/globals"
     ],
@@ -25,5 +21,11 @@
         "./tests/*"
       ]
     }
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.js",
+    "**/*.map"
+  ]
 }

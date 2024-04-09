@@ -49,6 +49,12 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build front end for E2E tests
+        run: npm run build -w=client
+        env:
+          VITE_API_ORIGIN: http://localhost:3000
+          VITE_API_PATH: /api/v1/trpc
+      
       - name: Build server code for E2E tests
         run: npm run build:tsup -w=server
 
@@ -60,12 +66,6 @@ jobs:
           DB_NAME: testdb
 
           PORT: 3000
-
-      - name: Build front end for E2E tests
-        run: npm run build -w=client
-        env:
-          VITE_API_ORIGIN: http://localhost:3000
-          VITE_API_PATH: /api/v1/trpc
 
       - name: Wait for server to startup
         uses: Jtalk/url-health-check-action@v3.2

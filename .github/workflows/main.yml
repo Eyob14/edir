@@ -42,3 +42,6 @@ jobs:
 
       - name: Test server
         run: npm run test -w=server
+
+      - name: Test client (unit)
+        run: npm run test:unit -w=client

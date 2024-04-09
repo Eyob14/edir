@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { FwbButton, FwbInput, FwbTextarea, FwbSelect } from 'flowbite-vue'
+import { FwbButton, FwbInput, FwbTextarea } from 'flowbite-vue'
 import AlertError from '@/components/AlertError.vue'
 import useErrorMessage from '@/composables/useErrorMessage'
 import { trpc } from '@/trpc'

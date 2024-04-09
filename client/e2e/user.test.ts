@@ -50,7 +50,7 @@ test.describe.serial('signup and login sequence', () => {
     })
 
     const successMessage = page.getByTestId('successMessage')
-    const errorMessage = page.getByTestId('errorMessage')
+    // const errorMessage = page.getByTestId('errorMessage')
     await expect(successMessage).toBeHidden() // sanity check
 
     // When (ACT)

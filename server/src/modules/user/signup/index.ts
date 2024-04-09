@@ -22,7 +22,7 @@ export default publicProcedure
       ctx: { db },
     }) => {
       const hash = await bcrypt.hash(password, config.auth.passwordCost)
-      console.log('Called')
+
       try {
         const user = await db.getRepository(User).save({
           email,

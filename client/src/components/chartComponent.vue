@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Chart, { type ChartConfiguration, type ChartItem } from 'chart.js/auto'
-import { onBeforeMount, onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { Income, Expense, Penalty } from '@mono/server/src/shared/entities'
 const { incomes, expenses, penalties } = defineProps(['incomes', 'expenses', 'penalties'])
 

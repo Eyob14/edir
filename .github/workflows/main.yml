@@ -6,7 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     services:
-      # spin up a database for this job
       postgres:
         image: postgres:16.1-alpine
         env:
@@ -22,8 +21,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.19.0'
-          cache: 'npm'
+          node-version: "20.10.0"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -46,7 +45,6 @@ jobs:
       - name: Test client (unit)
         run: npm run test:unit -w=client
 
-
       # Add more browsers here if you want to test on more/different browsers
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
@@ -58,7 +56,6 @@ jobs:
           DB_PASSWORD: turing
           DB_NAME: testdb
 
-          # port to start the server on
           PORT: 3000
 
       - name: Build front end for E2E tests
@@ -66,9 +63,19 @@ jobs:
         env:
           VITE_API_ORIGIN: http://localhost:3000
           VITE_API_PATH: /api/v1/trpc
+          
+      - name: Wait for server to startup
+        uses: Jtalk/url-health-check-action@v3.2
+        with:
+          max-attempts: 5
+          retry-delay: 5s
+          url: http://localhost:3000/api/health
 
       - name: Test client E2E
         run: npm run test:e2e -w=client
+        env:
+          VITE_API_ORIGIN: http://localhost:3000
+          VITE_API_PATH: /api/v1/trpc
 
       - uses: actions/upload-artifact@v3
         if: always()

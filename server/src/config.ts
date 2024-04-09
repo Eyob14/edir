@@ -46,12 +46,6 @@ const schema = z
       logging: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
       synchronize: z.preprocess(coerceBoolean, z.boolean().default(isDevTest)),
     }),
-
-    cloudinary: z.object({
-      cloudName: z.string(),
-      apiKey: z.string(),
-      apiSecret: z.string(),
-    }),
   })
   .readonly()
 
@@ -77,13 +71,7 @@ const config = schema.parse({
     password: env.DB_PASSWORD,
     logging: env.DB_LOGGING,
     synchronize: env.DB_SYNC,
-  },
-
-  cloudinary: {
-    cloudName: env.CLOUDINARY_CLOUD_NAME,
-    apiKey: env.CLOUDINARY_API_KEY,
-    apiSecret: env.CLOUDINARY_API_SECRET,
-  },
+  }
 })
 
 export default config

@@ -20,7 +20,7 @@ const schema = z
 
     database: z.object({
       type: z
-        .enum(['postgres', 'mysql', 'mariadb', 'better-sqlite3', 'pg-mem'])
+        .enum(['postgres', 'mysql', 'mariadb', 'pg-mem'])
         .default('postgres'),
       host: z.string().default('localhost'),
       port: z.coerce.number().default(5432),

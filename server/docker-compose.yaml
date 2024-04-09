@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.1-alpine
+    environment:
+      POSTGRES_USER: eyob
+      POSTGRES_PASSWORD: eyob
+      POSTGRES_DB: edir-db
+    ports:
+      - '5435:5432'
+    volumes:
+      - edir-db:/var/lib/postgresql/data
+
+  server:
+    build: .
+    environment:
+      DB_USER: eyob
+      DB_PASSWORD: eyob
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: edir-db
+    ports:
+      - '3000:3000'
+
+    depends_on:
+      - postgres
+
+volumes:
+  edir-db:
+    name: edir-db

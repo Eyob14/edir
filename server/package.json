@@ -3,18 +3,25 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.9.0"
+  },
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsc --rootDir src && tsc-alias",
+    "build:tsup": "tsup-node",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "start": "node ./dist/index.js",
+    "start:loader": "node --import ./loader.js ./dist/index.js",
+    "start:esm": "node ./dist/index.js",
     "test": "npm run test:mem",
     "test:mem": "DB_TYPE=pg-mem vitest",
     "test:db": "vitest",
-    "typecheck": "tsc --noEmit"
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -34,9 +41,11 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
+    "pm2": "^5.3.0",
     "pg-mem": "^2.7.1",
     "prettier": "^3.0.3",
     "supertest": "^6.3.3",
+    "tsc-alias": "^1.8.8",
     "tsup": "^7.2.0",
     "tsx": "^3.13.0",
     "typescript": "^5.2.2",
@@ -64,9 +73,17 @@
     "zod-validation-error": "^2.1.0"
   },
   "tsup": {
-    "splitting": false,
-    "sourcemap": true,
     "clean": true,
+    "bundle": true,
+    "splitting": true,
+    "sourcemap": true,
+    "entry": [
+      "src/index.ts",
+      "src/database/migrations/*.ts"
+    ],
+    "format": [
+      "esm"
+    ],
     "external": [
       "@mikro-orm",
       "mysql",

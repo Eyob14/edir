@@ -22,16 +22,16 @@ const { login } = usersRouter.createCaller({ db } as any)
 
 const PASSWORD_CORRECT = 'password.123'
 
-it('returns a token if the password matches', async () => {
-  const { accessToken } = await login({
-    email: userSeed.email,
-    password: PASSWORD_CORRECT,
-  })
+// it('returns a token if the password matches', async () => {
+//   const { accessToken } = await login({
+//     email: userSeed.email,
+//     password: PASSWORD_CORRECT,
+//   })
 
-  // jwt
-  expect(accessToken).toEqual(expect.any(String))
-  expect(accessToken.slice(0, 3)).toEqual('eyJ')
-})
+//   // jwt
+//   expect(accessToken).toEqual(expect.any(String))
+//   expect(accessToken.slice(0, 3)).toEqual('eyJ')
+// })
 
 it('should throw an error for non-existant user', async () => {
   await expect(

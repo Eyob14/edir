@@ -9,10 +9,11 @@ COPY server/package*.json server/
 RUN npm ci
 
 # Copy over the server source code
-COPY . server/
+COPY server/ server/
 
 # Build the server
 WORKDIR /app/server
+
 RUN npm run build
 
 EXPOSE 3000

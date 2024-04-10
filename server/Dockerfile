@@ -13,7 +13,7 @@ COPY . server/
 
 # Build the server
 WORKDIR /app/server
-RUN npm run build:tsup
+RUN npm run build
 
 EXPOSE 3000
 

@@ -46,13 +46,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
       })
       return
     }
-    if (userForm.value.password !== userForm.value.confirmPassword) {
-      Toast.fire({
-        icon: 'error',
-        title: 'Passwords do not match!',
-      })
-      return
-    }
+    
     buttonLoading.value = true
     const uploadedImage = await uploadImageToCloudinary(userForm.value.profile)
 

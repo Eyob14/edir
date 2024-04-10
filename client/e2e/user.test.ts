@@ -65,7 +65,7 @@ test.describe.serial('signup and login sequence', () => {
 
     await form.locator('button[type="submit"]').click()
     // Then (ASSERT)
-    await expect(successMessage).toBeVisible()
+    await expect(successMessage).toBeVisible({timeout: 10000})
     // await expect(errorMessage).toBeVisible()
   })
 

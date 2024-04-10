@@ -18,3 +18,10 @@ export const fakeUser = () => ({
   password: 'password.123',
   age: random.age(),
 })
+
+export const fakeMaterial = () => ({
+  name: 'tent',
+  description: 'some description',
+  initialCount: 2,
+  boughtAt: new Date(),
+})

@@ -97,7 +97,7 @@ watchEffect(async () => {
   <div class="flex flex-col space-y-10">
     <!-- Overall Data -->
     <div class="flex w-full flex-col space-y-5 rounded-md border border-[#455a64] p-10">
-      <h1 class="text-3xl font-bold text-[#383e49d4]">Overall Monetary</h1>
+      <h1 class="text-3xl font-bold text-[#383e49d4]" data-testid="overall-monetary">Overall Monetary</h1>
       <div class="flex w-full justify-between space-x-10">
         <!-- Overall Income -->
         <div class="flex w-1/3 flex-col space-y-4 border-l-2 border-[#E19133] p-4">

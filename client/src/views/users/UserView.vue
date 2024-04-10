@@ -70,7 +70,7 @@ async function deleteUser(userId: number) {
 
 <template>
   <div class="flex flex-col space-y-8">
-    <FwbHeading tag="h2" class="text-[#383e49d4]">Users</FwbHeading>
+    <FwbHeading tag="h2" class="text-[#383e49d4]" data-testid="users-title">Users</FwbHeading>
 
     <fwb-table>
       <fwb-table-head>

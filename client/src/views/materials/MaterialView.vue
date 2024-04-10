@@ -21,6 +21,7 @@ onBeforeMount(async () => {
         :href="{ name: 'MaterialCreate' } as any"
         size="xs"
         class="h-12 w-full"
+        id="material-create-button"
       >
         <template #prefix>
           <svg

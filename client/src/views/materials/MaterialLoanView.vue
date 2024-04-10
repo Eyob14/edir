@@ -29,6 +29,7 @@ const errorMessage = ref('')
 watchEffect(async () => {
   materialLoans.value = await trpc.materialLoan.find.query()
 })
+
 const isViewModalOpened = ref(false)
 const isEditModalOpened = ref(false)
 const isReturnModalOpened = ref(false)
@@ -151,7 +152,7 @@ async function approveMaterialLoan(materialLoanId: number) {
 <template>
   <fwb-table>
     <fwb-table-head>
-      <fwb-table-head-cell>Material Name</fwb-table-head-cell>
+      <fwb-table-head-cell data-testid="material-table">Material Name</fwb-table-head-cell>
       <fwb-table-head-cell>Requested Count</fwb-table-head-cell>
       <fwb-table-head-cell>Request Status</fwb-table-head-cell>
       <fwb-table-head-cell>Requested Date</fwb-table-head-cell>

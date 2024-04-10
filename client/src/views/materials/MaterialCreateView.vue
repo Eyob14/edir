@@ -71,6 +71,7 @@ function handleFileSelect(e: Event) {
               :src="imageUrl"
               alt="Material Image"
               class="h-full w-full object-cover"
+
             />
             <div
               v-else
@@ -142,6 +143,7 @@ function handleFileSelect(e: Event) {
           outline
           class="text-center text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           @click="router.back()"
+          id="cancel-button"
           >Cancel</FwbButton
         >
         <FwbButton type="submit" :loading="buttonLoading">Create</FwbButton>

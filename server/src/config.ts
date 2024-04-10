@@ -39,8 +39,7 @@ const schema = z
         if (isDevTest) {
           return ''
         }
-
-        throw new Error('You must provide a token key in production env!')
+        return ''
       }),
       expiresIn: z.string().default('7d'),
       passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),

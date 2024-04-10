@@ -46,7 +46,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
       })
       return
     }
-    
+
     buttonLoading.value = true
     const uploadedImage = await uploadImageToCloudinary(userForm.value.profile)
 
@@ -82,8 +82,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
             class="h-full w-full object-cover"
           />
           <div>
-            v-else
-            class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400">
+            v-else class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-8 w-8"
@@ -109,8 +108,20 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           />
         </label>
       </div>
-      <FwbInput label="First Name" type="text" v-model="userForm.firstName" :required="true" id="firstName"/>
-      <FwbInput label="Last Name" type="text" v-model="userForm.lastName" :required="true" id="lastName" />
+      <FwbInput
+        label="First Name"
+        type="text"
+        v-model="userForm.firstName"
+        :required="true"
+        id="firstName"
+      />
+      <FwbInput
+        label="Last Name"
+        type="text"
+        v-model="userForm.lastName"
+        :required="true"
+        id="lastName"
+      />
       <FwbInput label="Email" type="email" v-model="userForm.email" :required="true" />
       <FwbInput
         label="Password"
@@ -124,7 +135,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
       <FwbInput label="Age" type="number" v-model="userForm.age" :required="true" />
 
       <FwbAlert v-if="hasSucceeded" data-testid="successMessage" type="success">
-        You have successfully signed up! You can now log in.
+        You have successfully signed up! You can now log in to the system.
         <RouterLink
           :to="{ name: 'Login' }"
           class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
@@ -134,7 +145,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
       <AlertError :message="errorMessage" data-testid="errorMessage">
         {{ errorMessage }}
       </AlertError>
-      
+
       <div class="grid">
         <FwbButton color="default" type="submit" :loading="buttonLoading" size="xl"
           >Sign up</FwbButton

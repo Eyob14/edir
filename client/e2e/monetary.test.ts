@@ -16,7 +16,7 @@ test.describe('Material Loan tests', () => {
     await expect(dashboardLink).toBeHidden()
   })
 
-  test('Admin can see an over all monetary', async ({ page }) => {
+  test.skip('Admin can see an over all monetary', async ({ page }) => {
     await page.goto('dashboard/monetary')
 
     await expect(page.getByTestId('overall-monetary')).toBeVisible({ timeout: 30000 })

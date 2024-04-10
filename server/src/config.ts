@@ -39,7 +39,7 @@ const schema = z
         if (isDevTest) {
           return ''
         }
-        return ''
+        return 'c72ea80b4e166a44c83e6856089213cbe188be54fd79ef7a06c6c94e1fc024adf66af23ae41da072c4ad9623c6ea207b3a0fec5a6b8f4b5aa9b928490e52dd1b'
       }),
       expiresIn: z.string().default('7d'),
       passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),

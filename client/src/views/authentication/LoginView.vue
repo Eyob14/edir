@@ -6,7 +6,6 @@ import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
 import useErrorMessage from '@/composables/useErrorMessage'
 import { authUserRole } from '../../stores/user'
-import { error } from 'console'
 
 const router = useRouter()
 

@@ -49,9 +49,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Build server code for E2E tests
-        run: npm run build:tsup -w=server
-
       - name: Start server for E2E tests
         run: npm run dev -w=server &
         env:

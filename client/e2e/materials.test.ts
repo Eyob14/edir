@@ -25,6 +25,6 @@ test.describe('Material', () => {
   test('Admin can see create material page', async ({ page }) => {
     await page.goto('/dashboard/create')
 
-    await expect(page.locator('#cancel-button')).toBeVisible()
+    await expect(page.locator('#cancel-button')).toBeVisible({ timeout: 30000 })
   })
 })

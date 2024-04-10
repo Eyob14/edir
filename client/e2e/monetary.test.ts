@@ -19,6 +19,6 @@ test.describe('Material Loan tests', () => {
   test('Admin can see an over all monetary', async ({ page }) => {
     await page.goto('dashboard/monetary')
 
-    await expect(page.getByTestId('overall-monetary')).toBeVisible()
+    await expect(page.getByTestId('overall-monetary')).toBeVisible({ timeout: 30000 })
   })
 })

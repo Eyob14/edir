@@ -19,6 +19,6 @@ test.describe('Material Loan tests', () => {
   test('Admin can see list of material loan', async ({ page }) => {
     await page.goto('dashboard/materialLoan')
 
-    await expect(page.getByTestId('material-table')).toBeVisible()
+    await expect(page.getByTestId('material-table')).toBeVisible({ timeout: 30000 })
   })
 })

@@ -9,7 +9,7 @@ COPY server/package*.json server/
 RUN npm ci
 
 # Copy over the server source code
-COPY server/ server/
+COPY . server/
 
 # Build the server
 WORKDIR /app/server

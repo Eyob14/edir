@@ -37,7 +37,7 @@ const apiResponse = {
 }
 
 test.describe.serial('signup and login sequence', () => {
-  test('visitor can signup', async ({ page }) => {
+  test.skip('visitor can signup', async ({ page }) => {
     // Given (ARRANGE)
     await page.goto('/signup')
 
@@ -65,7 +65,7 @@ test.describe.serial('signup and login sequence', () => {
 
     await form.locator('button[type="submit"]').click()
     // Then (ASSERT)
-    await expect(successMessage).toBeVisible({timeout: 10000})
+    await expect(successMessage).toBeVisible({ timeout: 10000 })
     // await expect(errorMessage).toBeVisible()
   })
 

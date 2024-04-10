@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { FwbButton, FwbInput, FwbTextarea, FwbSelect } from 'flowbite-vue'
+import { FwbButton, FwbInput, FwbTextarea } from 'flowbite-vue'
 import AlertError from '@/components/AlertError.vue'
-import useErrorMessage from '@/composables/useErrorMessage'
 import { trpc } from '@/trpc'
-import type { PenaltyInsert, Penalty } from '@mono/server/src/shared/entities'
+import type {  Penalty } from '@mono/server/src/shared/entities'
 import PageForm from '@/components/PageForm.vue'
 import { DEFAULT_SERVER_ERROR } from '@/consts'
 import { Toast } from '@/utils/snackBarUtil'

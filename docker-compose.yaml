@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  # spin up a database
+  postgres:
+    image: postgres:16.1-alpine
+    environment:
+      POSTGRES_USER: turing
+      POSTGRES_PASSWORD: turing
+      POSTGRES_DB: edir
+    ports:
+      - "5432"
+    volumes:
+      - edir-db:/var/lib/postgresql/data
+
+  # start up an API server
+  server:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    # If we would have some secrets that we want to pass:
+    # env_file:
+    #   - ./server/.env
+    environment:
+      DB_HOST: postgres
+      DB_USER: turing
+      DB_PASSWORD: turing
+      DB_NAME: edir
+      PORT: 3000
+    ports:
+      - "3000"
+    depends_on:
+      - postgres
+
+  # start up a client (and proxy) server
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+      args:
+        VITE_API_ORIGIN: http://localhost:3001
+        VITE_API_PATH: /api/v1/trpc
+        VITE_CLOUDINARY_CLOUD_NAME: diqcnybcx
+        VITE_CLOUDINARY_PRESET: edirApp
+    environment:
+      API_PROXY_PASS: http://server:3000
+    ports:
+      - "3001:80"
+    depends_on:
+      - server
+
+volumes:
+  edir-db:

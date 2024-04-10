@@ -21,5 +21,11 @@
         "./tests/*"
       ]
     }
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.js",
+    "**/*.map"
+  ]
 }

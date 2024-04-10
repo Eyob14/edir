@@ -1,6 +1,6 @@
 # Edir
 
-![Preview](README/github-preview.gif)
+![Preview](README/preview.gif)
 
 
 ## Purpose

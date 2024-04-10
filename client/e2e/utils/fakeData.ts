@@ -12,6 +12,9 @@ export const random = process.env.CI ? Chance(1) : Chance()
  * our tests to fail because of a duplicate email.
  */
 export const fakeUser = () => ({
+  firstName: 'aleme',
+  lastName: 'beyene',
   email: random.email(),
   password: 'password.123',
+  age: random.age(),
 })

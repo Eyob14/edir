@@ -18,7 +18,6 @@ import {
 import { dateConvertor } from '@/utils/dateConvertor'
 import type { Relative, Income, MaterialLoan, User } from '@mono/server/src/shared/entities'
 import MaterialLoanModal from '@/components/modals/MaterialLoan.vue'
-import IncomeDetails from '@/components/modals/IncomeDetails.vue'
 import IncomeTableComponent from '@/components/tables/IncomeTableComponent.vue'
 
 const route = useRoute()

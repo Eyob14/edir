@@ -91,7 +91,7 @@ export type UserBare = Omit<
 export const userSchema = validates<UserBare>().with({
   id: z.number().int().positive(),
   email: z.string().trim().toLowerCase().email(),
-  password: z.string().min(8).max(64),
+  password: z.string().trim().min(8).max(64),
   firstName: z.string().trim().min(2).max(100),
   lastName: z.string().trim().min(2).max(100),
   age: z.number().int().positive(),

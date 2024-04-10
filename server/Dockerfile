@@ -3,11 +3,17 @@ FROM node:18.19.0-alpine3.18 AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ../package*.json .
+COPY client/package*.json client/
+COPY server/package*.json server/
+RUN npm ci
 
-RUN npm install
+# Copy over the server source code
+COPY server/ server/
 
-COPY . .
+# Build the server
+WORKDIR /app/server
+RUN npm run build:tsup
 
 EXPOSE 3000
 

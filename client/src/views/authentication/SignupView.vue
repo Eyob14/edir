@@ -77,8 +77,7 @@ async function submitSignup() {
           />
           <div>
             v-else
-            class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400"
-          >
+            class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-8 w-8"

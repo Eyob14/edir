@@ -95,6 +95,7 @@ jobs:
       API_PATH: /api/v1/trpc
       CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
       CLOUDINARY_PRESET: ${{ secrets.CLOUDINARY_PRESET }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       VITE_SENTARY_DNS: ${{ secrets.VITE_SENTARY_DNS }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}

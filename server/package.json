@@ -8,7 +8,7 @@
     "node": ">=18.9.0"
   },
   "scripts": {
-    "build": "tsup-node && npm run sentry:sourcemaps",
+    "build": "tsup-node && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
@@ -21,7 +21,7 @@
     "test:mem": "DB_TYPE=pg-mem vitest",
     "test:db": "vitest",
     "type-check": "tsc --noEmit",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sona-tecno --project edir_backend ./dist && sentry-cli sourcemaps upload --org sona-tecno --project edir_backend ./dist"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sona-tecno --project trpc-backend ./dist && sentry-cli sourcemaps upload --org sona-tecno --project trpc-backend ./dist"
   },
   "keywords": [],
   "author": "",

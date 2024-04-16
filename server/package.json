@@ -8,7 +8,7 @@
     "node": ">=18.9.0"
   },
   "scripts": {
-    "build": "tsup-node",
+    "build": "tsup-node && npm run sentry:sourcemaps",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
@@ -20,7 +20,8 @@
     "test": "npm run test:mem",
     "test:mem": "DB_TYPE=pg-mem vitest",
     "test:db": "vitest",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sona-tecno --project edir_backend ./dist && sentry-cli sourcemaps upload --org sona-tecno --project edir_backend ./dist"
   },
   "keywords": [],
   "author": "",
@@ -52,7 +53,9 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@sentry/cli": "^2.31.0",
     "@sentry/node": "^7.110.1",
+    "@sentry/profiling-node": "^7.110.1",
     "@trpc/server": "^10.41.0",
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^8.0.0",

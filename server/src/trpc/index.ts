@@ -1,5 +1,6 @@
 import { initTRPC } from '@trpc/server'
 import type { Request, Response } from 'express'
+import * as Sentry from '@sentry/node'
 import type { AuthUser } from '@server/entities/user'
 import type { Database } from '@server/database'
 import SuperJSON from 'superjson'
@@ -37,9 +38,12 @@ const t = initTRPC.context<Context>().create({
   },
 })
 
-export const {
-  middleware,
-  router,
-  procedure: publicProcedure,
-  mergeRouters,
-} = t
+export const sentryMiddleware = t.middleware(
+  Sentry.Handlers.trpcMiddleware({
+    attachRpcInput: true,
+  })
+)
+
+export const publicProcedure = t.procedure.use(sentryMiddleware)
+
+export const { middleware, router, mergeRouters } = t

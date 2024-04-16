@@ -16,7 +16,7 @@ export default publicProcedure
       password: true,
     })
   )
-  .mutation(async ({ input: { email, password }, ctx: { db } }) => {
+  .mutation(async ({ input: { email, password }, ctx: { db } }) => { 
     const user = (await db.getRepository(User).findOne({
       select: {
         id: true,

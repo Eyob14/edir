@@ -46,6 +46,10 @@ const schema = z
       adminEmail: z.coerce.string().email().default('admin@example.com'),
       adminPassword: z.coerce.string().default('admin123'),
     }),
+
+    sentry: z.object({
+      dsn: z.string().optional(),
+    }),
   })
   .readonly()
 
@@ -72,6 +76,10 @@ const config = schema.parse({
     logging: env.DB_LOGGING,
     synchronize: env.DB_SYNC,
     ssl: env.DB_SSL,
+  },
+
+  sentry: {
+    dsn: env.SENTRY_AUTH_TOKEN,
   },
 })
 

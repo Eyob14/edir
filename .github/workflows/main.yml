@@ -95,6 +95,7 @@ jobs:
       API_PATH: /api/v1/trpc
       CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
       CLOUDINARY_PRESET: ${{ secrets.CLOUDINARY_PRESET }}
+      VITE_SENTARY_DNS: ${{ secrets.VITE_SENTARY_DNS }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}
     steps:
@@ -132,6 +133,7 @@ jobs:
           --build-arg VITE_API_PATH=$API_PATH
           --build-arg VITE_CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
           --build-arg VITE_CLOUDINARY_PRESET=$CLOUDINARY_PRESET
+          --build-arg VITE_SENTARY_DNS=$SENTARY_DNS
           -f ./client/Dockerfile .
 
       - name: Push server image
@@ -181,7 +183,9 @@ jobs:
                 "DB_HOST": "${{ secrets.PROD_DB_HOST }}",
                 "DB_NAME": "${{ secrets.PROD_DB_NAME }}",
                 "DB_USER": "${{ secrets.PROD_DB_USER }}",
-                "DB_PASSWORD": "${{ secrets.PROD_DB_PASSWORD }}"
+                "DB_PASSWORD": "${{ secrets.PROD_DB_PASSWORD }}",
+                "TOKEN_KEY": "${{secrets.TOKEN_KEY}}",
+                "SENTRY_AUTH_TOKEN": "${{ secrets.SENTRY_AUTH_TOKEN }}"
               }
             }
           }' > containers.json

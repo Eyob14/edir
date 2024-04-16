@@ -8,7 +8,7 @@
     "node": ">=18.9.0"
   },
   "scripts": {
-    "build": "tsup-node && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
+    "build": "tsup-node",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",

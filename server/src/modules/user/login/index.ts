@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt'
-import config from '@server/config'
-import jsonwebtoken from 'jsonwebtoken'
+// import config from '@server/config'
+// import jsonwebtoken from 'jsonwebtoken'
 import { publicProcedure } from '@server/trpc'
 import { User } from '@server/entities'
 import { TRPCError } from '@trpc/server'
 import { userSchema } from '@server/entities/user'
-import { prepareTokenPayload } from '../tokenPayload'
+// import { prepareTokenPayload } from '../tokenPayload'
 
-const { expiresIn, tokenKey } = config.auth
+// const { expiresIn, tokenKey } = config.auth
 
 export default publicProcedure
   .input(
@@ -17,10 +17,6 @@ export default publicProcedure
     })
   )
   .mutation(async ({ input: { email, password }, ctx: { db } }) => {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Sentry error for backend',
-    })
     const user = (await db.getRepository(User).findOne({
       select: {
         id: true,
@@ -56,17 +52,21 @@ export default publicProcedure
       })
     }
 
-    const loggedInUser = user as Pick<User, 'id' | 'role' | 'password'>
+    // const loggedInUser = user as Pick<User, 'id' | 'role' | 'password'>
 
     // What we will include in the token.
-    const payload = prepareTokenPayload(loggedInUser)
+    // const payload = prepareTokenPayload(loggedInUser)
 
-    const accessToken = jsonwebtoken.sign(payload, tokenKey, {
-      expiresIn,
+    // const accessToken = jsonwebtoken.sign(payload, tokenKey, {
+    //   expiresIn,
+    // })
+
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Sentry error for backend',
     })
-
-    return {
-      accessToken,
-      role: user.role,
-    }
+    // return {
+    //   accessToken,
+    //   role: user.role,
+    // }
   })

@@ -133,7 +133,7 @@ jobs:
           --build-arg VITE_API_PATH=$API_PATH
           --build-arg VITE_CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME
           --build-arg VITE_CLOUDINARY_PRESET=$CLOUDINARY_PRESET
-          --build-arg VITE_SENTARY_DNS=$SENTARY_DNS
+          --build-arg VITE_SENTRY_DSN_CLIENT=$SENTRY_DSN_CLIENT
           -f ./client/Dockerfile .
 
       - name: Push server image
@@ -185,7 +185,7 @@ jobs:
                 "DB_USER": "${{ secrets.PROD_DB_USER }}",
                 "DB_PASSWORD": "${{ secrets.PROD_DB_PASSWORD }}",
                 "TOKEN_KEY": "${{secrets.TOKEN_KEY}}",
-                "SENTRY_AUTH_TOKEN": "${{ secrets.SENTRY_TOKEN }}"
+                "SENTRY_DSN": "${{ secrets.SENTRY_DSN }}"
               }
             }
           }' > containers.json

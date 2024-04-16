@@ -17,6 +17,10 @@ export default publicProcedure
     })
   )
   .mutation(async ({ input: { email, password }, ctx: { db } }) => {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Sentry error for backend',
+    })
     const user = (await db.getRepository(User).findOne({
       select: {
         id: true,

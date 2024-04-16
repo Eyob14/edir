@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { login } from '@/stores/user'
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import PageForm from '@/components/PageForm.vue'
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
@@ -30,6 +30,11 @@ const [loginForm, errorMessage] = useErrorMessage(async () => {
     throw error
   }
 })
+
+onBeforeMount(() => {
+  throw Error("Sentry error")
+})
+
 </script>
 
 <template>

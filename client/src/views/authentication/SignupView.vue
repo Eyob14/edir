@@ -81,8 +81,10 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
             alt="Profile Image"
             class="h-full w-full object-cover"
           />
-          <div>
-            v-else class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400">
+          <div
+            v-else
+            class="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-8 w-8"

@@ -16,15 +16,15 @@ test.describe('Material', () => {
     await expect(dashboardLink).toBeHidden()
   })
 
-  test.skip('Admin can see list of materials', async ({ page }) => {
+  test('Admin can see list of materials', async ({ page }) => {
     await page.goto('/dashboard/material')
 
     await expect(page.locator('#material-create-button')).toBeVisible()
   })
 
-  test.skip('Admin can see create material page', async ({ page }) => {
+  test('Admin can see create material page', async ({ page }) => {
     await page.goto('/dashboard/create')
 
-    await expect(page.locator('#cancel-button')).toBeVisible({ timeout: 30000 })
+    await expect(page.locator('#cancel-button')).toBeVisible()
   })
 })

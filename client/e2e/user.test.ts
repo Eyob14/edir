@@ -37,7 +37,7 @@ const apiResponse = {
 }
 
 test.describe.serial('signup and login sequence', () => {
-  test.skip('visitor can signup', async ({ page }) => {
+  test('visitor can signup', async ({ page }) => {
     // Given (ARRANGE)
     await page.goto('/signup')
 

@@ -16,7 +16,7 @@ test.describe('Material Loan tests', () => {
     await expect(dashboardLink).toBeHidden()
   })
 
-  test.skip('Admin can see list of material loan', async ({ page }) => {
+  test('Admin can see list of material loan', async ({ page }) => {
     await page.goto('dashboard/materialLoan')
 
     await expect(page.getByTestId('material-table')).toBeVisible({ timeout: 30000 })

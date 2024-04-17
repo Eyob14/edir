@@ -7,6 +7,15 @@
 
 **Edir** is the modern approach of Ethiopian tradition which brings people together during funerals to help each other. The web app provides a modern way and shares Ethiopians people tradition with other cultures around the world. The platform is easy to access and can be customized for the specific needs of the culture. It allows people to cover their expenses during funeral ceremonies.
 
+## Deployed Link
+
+- [Link](https://edir.f67sjkvetus34.eu-west-2.cs.amazonlightsail.com)
+
+## Admin user credentials
+
+- Email: admin@example.com
+- Password: admin123
+
 ### Running the project
 
 The project is structured into 2 workspaces:
